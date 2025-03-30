@@ -35,6 +35,11 @@
         }
     };
 
+    let isTextVisible = true;
+    const toggleTextVisibility = () => {
+        isTextVisible = !isTextVisible;
+    };
+
     onMount(async () => {
         const protocol = new pmtiles.Protocol();
         maplibregl.addProtocol("pmtiles", protocol.tile);
@@ -74,12 +79,21 @@
             map.addControl(scale, "bottom-right");
         }
 
-        // Remove or add the scale bar dynamically on window resize
+        //RESIZE EVENTS
         window.addEventListener("resize", () => {
+            // MOVE SCALE BAR
             if (window.innerWidth < 750 && map.hasControl(scale)) {
                 map.removeControl(scale); // Remove the scale bar if screen width is less than 750px
             } else if (window.innerWidth >= 750 && !map.hasControl(scale)) {
                 map.addControl(scale, "bottom-right"); // Add the scale bar back if screen width is 750px or more
+            }
+
+            // TEXT
+            if (window.innerWidth >= 750) {
+                isTextVisible = true;
+            }
+            if (window.innerWidth < 750) {
+                isTextVisible = false;
             }
         });
         map.addControl(
@@ -247,21 +261,32 @@
         name="viewport"
         content="width=device-width, initial-scale=1, minimum-scale=1"
     />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
 </svelte:head>
 
 <div id="box">
     <div class="title">
         <h3>Toronto FAR Map</h3>
+    </div>
+
+    <button
+        class="btn toggle-text-btn"
+        on:click={toggleTextVisibility}
+        style="margin-bottom: 10px;"
+    >
+        {isTextVisible ? "Hide Info" : "Show Info"}
+    </button>
+
+    <div class="text" style="display: {isTextVisible ? 'block' : 'none'};">
+        <p><strong>What is Floor Area Ratio (FAR)?</strong></p>
         <p>
             <a href="https://jamaps.github.io/" target="_blank">Jeff Allen</a>,
             <a
                 href="https://www.linkedin.com/in/scott-christian-mccallum/"
                 target="_blank">Scott McCallum</a
-            >
+            > | April 2025
         </p>
-    </div>
-    <div class="text">
-        <p><strong>What is Floor Area Ratio (FAR)?</strong></p>
         <p>
             FAR is a measure of a building's total floor area relative to the
             size of its lot. It is calculated as:
@@ -277,35 +302,67 @@
             setbacks, height limits, and lot coverage can influence massing
             while maintaining the same FAR.
         </p>
+
+        <p>[DIAGRAM ILLUSTRATION]</p>
+        <p></p>
+        <p><strong>Methodology</strong></p>
         <p>
+            This visualization was created using 3D massing and property line
+            data from
+            <a href="https://open.toronto.ca/" target="_blank"
+                >the City of Toronto’s Open Data Portal</a
+            >. For the FAR calculations, we assumed an average building floor
+            height of 3 meters.
+        </p>
+        <p>
+            Explore the project on
+            <a
+                href="https://github.com/schoolofcities/floor-area-ratio"
+                target="_blank"
+            >
+                GitHub
+            </a>.<img
+                src="src/assets/github-mark.svg"
+                alt="GitHub Logo"
+                style=" height: 15px; vertical-align: center; padding: 0 3px;"
+            />
+        </p>
+        <p>
+            Download the FAR data as a GeoJSON file <a href="#">here</a>.
+        </p>
+
+        <small>
             Map attributions: <br /><a
                 target="_blank"
                 href="https://openstreetmap.org">OpenStreetMap</a
             >, <br /><a target="_blank" href="https://open.toronto.ca/"
                 >City of Toronto</a
             >
-        </p>
+        </small>
     </div>
 
     <div id="legend">
-        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="80">
-            <text x="10" y="20" font-size="16" font-weight="bold"
+        <svg xmlns="http://www.w3.org/2000/svg" width="250" height="50">
+            <!-- <text x="0" y="20" font-size="16" font-weight="bold" 
                 >Floor Area Ratio (FAR)</text
-            >
-            <rect x="10" y="30" width="60" height="20" fill="#f6eff7" />
-            <rect x="70" y="30" width="60" height="20" fill="#bdc9e1" />
-            <rect x="130" y="30" width="60" height="20" fill="#67a9cf" />
-            <rect x="190" y="30" width="60" height="20" fill="#1c9099" />
-            <rect x="250" y="30" width="60" height="20" fill="#016c59" />
-            <text x="10" y="65" font-size="12">0</text>
-            <text x="70" y="65" font-size="12">0.5</text>
-            <text x="130" y="65" font-size="12">1.0</text>
-            <text x="190" y="65" font-size="12">2.0</text>
-            <text x="250" y="65" font-size="12">5.0</text>
-            <text x="310" y="65" font-size="12">5+</text>
+            > -->
+            <rect x="0%" y="10" width="20%" height="15" fill="#f6eff7" />
+            <rect x="20%" y="10" width="20%" height="15" fill="#bdc9e1" />
+            <rect x="40%" y="10" width="20%" height="15" fill="#67a9cf" />
+            <rect x="60%" y="10" width="20%" height="15" fill="#1c9099" />
+            <rect x="80%" y="10" width="20%" height="15" fill="#016c59" />
+            <text x="0%" y="45" font-size="12">0</text>
+            <text x="20%" y="45" font-size="12">0.5</text>
+            <text x="40%" y="45" font-size="12">1.0</text>
+            <text x="60%" y="45" font-size="12">2.0</text>
+            <text x="80%" y="45" font-size="12">5.0 +</text>
         </svg>
     </div>
-    <button class="btn" on:click={toggle3DVisibility} style="margin-top: 10px;">
+    <button
+        class="btn toggle-3d-btn"
+        on:click={toggle3DVisibility}
+        style="margin-top: 10px;"
+    >
         {is3DVisible ? "Hide 3D Buildings" : "Show 3D Buildings"}
     </button>
 
@@ -342,7 +399,7 @@
         padding: 20px;
         width: 300px;
         border-radius: 0.8em;
-        background-color: rgba(255, 255, 255, 0.8);
+        background-color: rgba(255, 255, 255, 0.9);
         border: 1px solid #ccc;
         overflow: hidden;
     }
@@ -365,7 +422,7 @@
         flex-direction: column;
     }
 
-    .btn {
+    .toggle-text-btn {
         background-color: white;
         color: black;
         padding: 5px;
@@ -375,9 +432,29 @@
         cursor: pointer;
     }
 
+    .toggle-3d-btn {
+        background-color: white;
+        color: black;
+        padding: 5px;
+        width: 150px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+    #legend {
+        margin: 10px;
+    }
+
     .logo {
         width: 250px;
         margin-top: 20px;
+    }
+
+    @media screen and (min-width: 750px) {
+        .toggle-text-btn {
+            display: none; /* Hide the button on larger screens */
+        }
     }
 
     @media screen and (max-width: 750px) {
@@ -409,7 +486,15 @@
             bottom: 20px; */
         }
 
-        .btn {
+        .toggle-text-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 40px;
+            width: 30vw;
+            font-size: 9pt;
+        }
+
+        .toggle-3d-btn {
             position: fixed;
             bottom: 45px;
             right: 40px;

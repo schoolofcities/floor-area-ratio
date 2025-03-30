@@ -159,6 +159,18 @@ p {
     line-height: 30px;
 }
 
+strong {
+    font-family: TradeGothicBold; /* Use a bold font */
+    font-weight: bold; /* Ensure the text is bold */
+    color: var(--brandBlack); /* Set the color to match your design */
+}
+
+small {
+    font-family: TradeGothicLTLightOblique;
+    font-size: 12px;
+    color: var(--brandBlack); /* Set the color to match your design */
+}
+
 
 a {
 	text-decoration: underline;

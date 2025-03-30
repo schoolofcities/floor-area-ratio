@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.8.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:none;stroke:#000000;stroke-width:0.25;stroke-linecap:round;}
+	.st2{fill:none;stroke:#000000;stroke-width:0.1;stroke-linecap:round;}
+</style>
+<g id="ISO::Visible">
+	<g id="ISO::Visible::Curves">
+		<g id="ISO::Visible::Curves::Default">
+			<g id="XMLID_00000161601695932720382190000008887439160327110583_">
+				<g>
+					<polygon class="st0" points="59.7,38.2 30,55.4 0.3,38.2 15.1,29.7 30,38.2 44.8,29.7 					"/>
+					<polygon class="st0" points="44.8,25.5 44.8,29.7 30,38.2 30,34.1 					"/>
+					<polygon class="st0" points="44.8,21.4 44.8,25.5 30,34.1 30,30 					"/>
+					<polygon class="st0" points="44.8,17.3 44.8,21.4 30,30 30,25.9 					"/>
+					<polygon class="st0" points="44.8,13.2 44.8,17.3 30,25.9 30,21.8 					"/>
+					<polygon class="st0" points="44.8,13.2 30,21.8 15.1,13.2 30,4.6 					"/>
+					<polygon class="st0" points="30,34.1 30,38.2 15.1,29.7 15.1,25.5 					"/>
+					<polygon class="st0" points="30,30 30,34.1 15.1,25.5 15.1,21.4 					"/>
+					<polygon class="st0" points="30,25.9 30,30 15.1,21.4 15.1,17.3 					"/>
+					<polygon class="st0" points="30,21.8 30,25.9 15.1,17.3 15.1,13.2 					"/>
+				</g>
+				<g>
+					<line class="st1" x1="44.8" y1="17.3" x2="44.8" y2="13.2"/>
+					<line class="st1" x1="15.1" y1="17.3" x2="15.1" y2="13.2"/>
+					<line class="st1" x1="30" y1="25.9" x2="30" y2="21.8"/>
+					<line class="st1" x1="44.8" y1="13.2" x2="30" y2="4.6"/>
+					<line class="st1" x1="44.8" y1="25.5" x2="44.8" y2="21.4"/>
+					<line class="st1" x1="15.1" y1="29.7" x2="30" y2="38.2"/>
+					<line class="st1" x1="44.8" y1="29.7" x2="44.8" y2="25.5"/>
+					<line class="st1" x1="30" y1="25.9" x2="44.8" y2="17.3"/>
+					<line class="st1" x1="15.1" y1="17.3" x2="30" y2="25.9"/>
+					<line class="st1" x1="30" y1="21.8" x2="44.8" y2="13.2"/>
+					<line class="st1" x1="15.1" y1="13.2" x2="30" y2="21.8"/>
+					<line class="st1" x1="15.1" y1="25.5" x2="30" y2="34.1"/>
+					<line class="st1" x1="30" y1="30" x2="44.8" y2="21.4"/>
+					<line class="st1" x1="15.1" y1="21.4" x2="30" y2="30"/>
+					<line class="st1" x1="30" y1="34.1" x2="44.8" y2="25.5"/>
+					<polyline class="st2" points="15.1,29.7 0.3,38.2 30,55.4 59.7,38.2 44.8,29.7 					"/>
+					<line class="st1" x1="30" y1="38.2" x2="44.8" y2="29.7"/>
+					<line class="st1" x1="15.1" y1="29.7" x2="15.1" y2="25.5"/>
+					<line class="st1" x1="30" y1="38.2" x2="30" y2="34.1"/>
+					<line class="st1" x1="44.8" y1="21.4" x2="44.8" y2="17.3"/>
+					<line class="st1" x1="15.1" y1="21.4" x2="15.1" y2="17.3"/>
+					<line class="st1" x1="30" y1="30" x2="30" y2="25.9"/>
+					<line class="st1" x1="15.1" y1="25.5" x2="15.1" y2="21.4"/>
+					<line class="st1" x1="30" y1="34.1" x2="30" y2="30"/>
+					<line class="st1" x1="30" y1="4.6" x2="15.1" y2="13.2"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>

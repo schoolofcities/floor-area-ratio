@@ -300,10 +300,15 @@
             A tall, narrow tower and a low, sprawling building can have the same
             FAR if their total floor areas are equal. Design choices like
             setbacks, height limits, and lot coverage can influence massing
-            while maintaining the same FAR.
+            while maintaining the same FAR:
         </p>
 
-        <p>[DIAGRAM ILLUSTRATION]</p>
+        <p style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <!-- These examples all have the same FAR of 1.0: -->
+            <img src="/src/assets/far-a.svg" alt="FAR Diagram" style="max-width: 150px; height: auto;" /> <small>FAR: 1.0</small>
+            <img src="/src/assets/far-b.svg" alt="FAR Diagram" style="max-width: 150px; height: auto;" /> <small>FAR: 1.0</small>
+            <img src="/src/assets/far-c.svg" alt="FAR Diagram" style="max-width: 150px; height: auto;" /><small>FAR: 1.0</small>
+        </p>
         <p></p>
         <p><strong>Methodology</strong></p>
         <p>

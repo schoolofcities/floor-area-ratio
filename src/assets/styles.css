@@ -1,0 +1,170 @@
+@font-face {
+	font-family: TradeGothicBold;
+	src: url("trade-gothic/Trade Gothic LT Bold.ttf");
+}
+
+@font-face {
+	font-family: TradeGothicLTLightOblique;
+	src: url("trade-gothic/Trade Gothic LT Light Oblique.ttf");
+}
+
+@font-face {
+	font-family: TradeGothicLTLight;
+	src: url("trade-gothic/Trade Gothic LT Light.ttf");
+}
+
+@font-face {
+	font-family: RobotoRegular;
+	src: url("roboto/Roboto-Regular.ttf");
+}
+
+@font-face {
+	font-family: RobotoBold;
+	src: url("roboto/Roboto-Bold.ttf");
+}
+
+@font-face {
+	font-family: SourceSerif;
+	src: url("source-serif-pro/SourceSerifPro-Regular.otf");
+}
+
+
+:root {
+	font-family: -apple-system, Roboto, "Open Sans", "Helvetica Neue", sans-serif;
+	--brandBlack: #000000;
+	--brandWhite: #ffffff;
+	--brandGray: #D0D1C9;
+	--brandGray70: #4d4d4d;
+	--brandGray80: #333333;
+	--brandGray90: #191919;
+	--brandDarkBlue: #1E3765;
+	--brandMedBlue: #007FA3;
+	--brandLightBlue: #6FC7EA;
+	--brandPurple: #6D247A;
+	--brandDarkGreen: #0D534D;
+	--brandMedGreen: #00A189;
+	--brandLightGreen: #8DBF2E;
+	--brandRed: #DC4633; 
+	--brandYellow: #F1C500;
+}
+
+body {
+	padding: 0px;
+	margin: 0px;
+	background-color: var(--brandWhite);
+}
+
+main {
+	margin: 0 auto;
+	padding: 0px;
+	width: calc(100%);
+	min-width: 360px;
+	max-width: 1200px;
+	position: relative;
+}
+
+.intro {
+    position: relative;
+    max-height: 67vh;
+    overflow: hidden;
+    border-bottom: solid 1px var(--brandGray);
+}
+
+.intro video {
+    width: 100%;
+    height: auto;
+    min-height: 500px;
+    display: block; 
+    object-fit: cover; 
+}
+.intro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.42);
+    z-index: 1; 
+}
+.intro-overlay {
+    position: absolute;
+    max-width: 700px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    color: white; 
+    z-index: 2; 
+}
+
+.intro-overlay h1 {
+    margin: 0;
+}
+
+.text {
+    background-color: none;
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 15px;
+    padding-right: 15px;
+	border-top: solid 1px var(--brandGray80);
+	margin-top: 0px;
+	
+}
+
+
+h1 {
+    font-family: sans-serif;
+    font-size: 42px;
+    color: var(--brandBlack);
+    /* border-bottom: solid 1px var(--brandGray); */
+    text-decoration: none;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding: 0px;
+}
+
+h2 {
+    text-align: left;
+    font-family: sans-serif;
+    font-size: 32px;
+    /* border-bottom: solid 1px var(--brandBlack); */
+    margin-top: 0px;
+    color: var(--brandBlack);
+}
+
+h3 {
+    text-align: left;
+    font-family: TradeGothicBold;
+    font-size: 23px;
+    /* border-bottom: solid 1px var(--brandGray); */
+    color: var(--brandBlack);
+}
+
+h4 {
+	text-align: left;
+    font-family: TradeGothicBold;
+    font-size: 23px;
+    color: var(--brandBlack);
+}
+
+p {
+    font-family: SourceSerif;
+    color: var(--brandBlack);
+    text-align: left;
+    font-size: 15px;
+    line-height: 30px;
+}
+
+
+a {
+	text-decoration: underline;
+	color: var(--brandMedBlue);
+}
+
+a:hover {
+	color: var(--brandMedGreen);
+}

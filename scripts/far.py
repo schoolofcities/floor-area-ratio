@@ -13,8 +13,8 @@ boundaryid = "OBJECTID"
 floor_height = 3
 
 # Output files
-output_shp = "results/far/property_boundaries_with_far.shp"
-output_geojson = "results/far/property_boundaries_with_far.geojson"
+output_shp = "results/far/far.shp"
+output_geojson = "results/far/far.geojson"
 
 # Load shapefiles
 print("📂 Loading shapefiles...")
@@ -27,9 +27,9 @@ boundary = boundary.reset_index(drop=True)
 boundary["boundary_id"] = boundary[boundaryid]
 
 # Reproject to projected CRS (meters)
-print("🗺️ Reprojecting to EPSG:32617...")
-buildings = buildings.to_crs(epsg=32617)
-boundary = boundary.to_crs(epsg=32617)
+print("🗺️ Reprojecting to EPSG:4326...")
+buildings = buildings.to_crs(epsg=4326)
+boundary = boundary.to_crs(epsg=4326)
 
 # Fix invalid geometries
 print("🧹 Fixing invalid geometries (buildings)...")
@@ -93,13 +93,48 @@ boundary['parcel_area'] = tqdm(boundary.geometry.area, desc="→ Calculating par
 boundary['far'] = boundary['total_floor_area'] / boundary['parcel_area']
 boundary['far'] = boundary['far'].fillna(0).round(2)
 
-# Save output as Shapefile
-print("💾 Saving to: {output_shp}")
-boundary.to_file(output_shp, driver="ESRI Shapefile")
+# Categorize FAR values into buckets
+print("📊 Categorizing FAR values into buckets...")
+def categorize_far(far):
+    if far <= 0.5:
+        return "0-0.5"
+    elif far <= 1:
+        return "0.5-1"
+    elif far <= 2:
+        return "1-2"
+    elif far <= 5:
+        return "2-5"
+    else:
+        return "5+"
 
-# Save output as GeoJSON
-print("💾 Saving to: {output_geojson}")
-boundary.to_file(output_geojson, driver="GeoJSON")
+boundary['far_bucket'] = boundary['far'].apply(categorize_far)
+
+# Dissolve features by FAR buckets
+# print("🧩 Dissolving features by FAR buckets...")
+# boundary_dissolved = boundary.dissolve(by='far_bucket', as_index=False)
+
+# Join FAR and FAR bucket values to split buildings
+print("🔗 Joining FAR and FAR bucket values to split buildings...")
+buildings_split = buildings_split.merge(boundary[['boundary_id', 'far', 'far_bucket']], on='boundary_id', how='left')
+
+# Keep only the desired fields in buildings_split
+print("🧹 Keeping only selected fields: boundary_id, AVG_HEIGHT, far, far_bucket...")
+buildings_split = buildings_split[['boundary_id', 'AVG_HEIGHT', 'far', 'far_bucket', 'geometry']]
+
+print(buildings_split.head())
+
+# Save buildings_split as GeoJSON
+output_buildings_geojson = "results/far/buildings_split.geojson"
+print(f"💾 Saving split buildings to: {output_buildings_geojson}")
+buildings_split.to_file(output_buildings_geojson, driver="GeoJSON")
+
+# # Save output as Shapefile
+# print("💾 Saving to: {output_shp}")
+# boundary.to_file(output_shp, driver="ESRI Shapefile")
+
+# # Save output as GeoJSON
+# print("💾 Saving to: {output_geojson}")
+# boundary.to_file(output_geojson, driver="GeoJSON")
 
 # Done
 print("✅ Done! Sample output:")

@@ -61,8 +61,8 @@
             minZoom: 10.5,
             // maxPitch: 0,
             maxBounds: [
-                [-79.8, 43.35], // Southwest corner (longitude, latitude)
-    [-79.0, 43.9], // Northeast coordinates
+                [-79.8, 43.35],
+                [-79.0, 43.9],
             ],
             attributionControl: false,
         });
@@ -70,7 +70,18 @@
         //MAP INTERACTIONS
         map.boxZoom.disable();
 
-        map.addControl(scale, "bottom-right");
+        if (window.innerWidth >= 750) {
+            map.addControl(scale, "bottom-right");
+        }
+
+        // Remove or add the scale bar dynamically on window resize
+        window.addEventListener("resize", () => {
+            if (window.innerWidth < 750 && map.hasControl(scale)) {
+                map.removeControl(scale); // Remove the scale bar if screen width is less than 750px
+            } else if (window.innerWidth >= 750 && !map.hasControl(scale)) {
+                map.addControl(scale, "bottom-right"); // Add the scale bar back if screen width is 750px or more
+            }
+        });
         map.addControl(
             new maplibregl.NavigationControl({
                 showCompass: true,
@@ -166,12 +177,12 @@
                         "#1c9099",
                         "#016c59",
                     ],
-                    "fill-extrusion-height": ["get", "AVG_HEIGHT"], // Extrusion height
+                    "fill-extrusion-height": ["get", "AVG_HEIGHT"],
                     "fill-extrusion-base": 0,
                     "fill-extrusion-opacity": 0.9,
                 },
                 layout: {
-                    visibility: "none", // Hide the layer initially
+                    visibility: "none",
                 },
             });
 
@@ -182,23 +193,22 @@
             });
             map.addLayer({
                 id: "far-data-layer",
-                type: "fill", // Change to fill layer
+                type: "fill",
                 source: "far-data",
-                "source-layer": "far", // Replace with the correct source layer name if different
+                "source-layer": "far",
                 paint: {
-                    "fill-color": "#000000", // Black color (not visible due to opacity)
-                    "fill-opacity": 0, // Set opacity to 0
+                    "fill-color": "#000000",
+                    "fill-opacity": 0,
                 },
             });
 
-            // Add hover interaction
+            //HOVER FAR LABELS
             const popup = new maplibregl.Popup({
                 closeButton: false,
                 closeOnClick: false,
             });
 
             map.on("mousemove", "far-data-layer", (e) => {
-                // Check the current zoom level
                 const currentZoom = map.getZoom();
                 const minZoom = 13; // Set the minimum zoom level for labels
 
@@ -219,8 +229,15 @@
             });
 
             map.on("mouseleave", "far-data-layer", () => {
-                popup.remove(); // Remove popup when the mouse leaves the layer
+                popup.remove();
             });
+
+            //MOVING LABELS TO THE TOP
+            map.moveLayer("roads_labels_minor");
+            map.moveLayer("roads_labels_major");
+            map.moveLayer("places_subplace");
+            map.moveLayer("pois_important");
+            map.moveLayer("places_locality");
         });
     });
 </script>
@@ -270,6 +287,24 @@
         </p>
     </div>
 
+    <div id="legend">
+        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="80">
+            <text x="10" y="20" font-size="16" font-weight="bold"
+                >Floor Area Ratio (FAR)</text
+            >
+            <rect x="10" y="30" width="60" height="20" fill="#f6eff7" />
+            <rect x="70" y="30" width="60" height="20" fill="#bdc9e1" />
+            <rect x="130" y="30" width="60" height="20" fill="#67a9cf" />
+            <rect x="190" y="30" width="60" height="20" fill="#1c9099" />
+            <rect x="250" y="30" width="60" height="20" fill="#016c59" />
+            <text x="10" y="65" font-size="12">0</text>
+            <text x="70" y="65" font-size="12">0.5</text>
+            <text x="130" y="65" font-size="12">1.0</text>
+            <text x="190" y="65" font-size="12">2.0</text>
+            <text x="250" y="65" font-size="12">5.0</text>
+            <text x="310" y="65" font-size="12">5+</text>
+        </svg>
+    </div>
     <button class="btn" on:click={toggle3DVisibility} style="margin-top: 10px;">
         {is3DVisible ? "Hide 3D Buildings" : "Show 3D Buildings"}
     </button>
@@ -285,7 +320,7 @@
 
 <style>
     a:hover .logo {
-        opacity: 0.7; /* Adjust the opacity value as needed */
+        opacity: 0.7;
     }
 
     #map {
@@ -318,7 +353,7 @@
 
     .text {
         flex-grow: 1;
-        overflow-y: auto; /* Adds scroll if content overflows */
+        overflow-y: auto;
     }
 
     h3 {
@@ -345,7 +380,6 @@
         margin-top: 20px;
     }
 
-    /* 📱 Mobile styles */
     @media screen and (max-width: 750px) {
         #box {
             position: absolute;

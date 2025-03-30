@@ -304,10 +304,9 @@
         </p>
 
         <p style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-            <!-- These examples all have the same FAR of 1.0: -->
-            <img src="/src/assets/far-a.svg" alt="FAR Diagram" style="max-width: 150px; height: auto;" /> <small>FAR: 1.0</small>
-            <img src="/src/assets/far-b.svg" alt="FAR Diagram" style="max-width: 150px; height: auto;" /> <small>FAR: 1.0</small>
-            <img src="/src/assets/far-c.svg" alt="FAR Diagram" style="max-width: 150px; height: auto;" /><small>FAR: 1.0</small>
+            <img class="far-diagram" src="/src/assets/far-a.svg" alt="FAR Diagram" /> <small>FAR: 1.0</small>
+            <img class="far-diagram" src="/src/assets/far-b.svg" alt="FAR Diagram" /> <small>FAR: 1.0</small>
+            <img class="far-diagram" src="/src/assets/far-c.svg" alt="FAR Diagram" /> <small>FAR: 1.0</small>
         </p>
         <p></p>
         <p><strong>Methodology</strong></p>
@@ -462,6 +461,11 @@
         }
     }
 
+    .far-diagram {
+        width: 150px;
+        height: auto;
+    }
+
     @media screen and (max-width: 750px) {
         #box {
             position: absolute;
@@ -505,6 +509,10 @@
             right: 40px;
             width: 30vw;
             font-size: 9pt;
+        }
+
+        .far-diagram {
+            width: 200px;
         }
     }
 </style>

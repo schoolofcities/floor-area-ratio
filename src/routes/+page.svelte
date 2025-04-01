@@ -5,7 +5,7 @@
     import "maplibre-gl/dist/maplibre-gl.css";
 
     import * as pmtiles from "pmtiles";
-    import BaseLayer from "../data/toronto.json";
+    import BaseLayer from "../assets/toronto.json";
 
     let MASSING_URL = "MASSING_FAR.pmtiles";
     let FAR_DATA_URL = "FAR-DATA.pmtiles";
@@ -345,6 +345,14 @@
         </small>
     </div>
 
+    <button
+    class="btn toggle-3d-btn"
+    on:click={toggle3DVisibility}
+    style="margin-top: 10px;"
+>
+    {is3DVisible ? "Hide 3D Buildings" : "Show 3D Buildings"}
+</button>
+
     <div id="legend">
         <svg xmlns="http://www.w3.org/2000/svg" width="250" height="50">
             <!-- <text x="0" y="20" font-size="16" font-weight="bold" 
@@ -362,13 +370,7 @@
             <text x="80%" y="45" font-size="12">5.0 +</text>
         </svg>
     </div>
-    <button
-        class="btn toggle-3d-btn"
-        on:click={toggle3DVisibility}
-        style="margin-top: 10px;"
-    >
-        {is3DVisible ? "Hide 3D Buildings" : "Show 3D Buildings"}
-    </button>
+
 
     <div class="bottom-content">
         <a href="https://schoolofcities.utoronto.ca/" target="_blank">

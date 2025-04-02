@@ -185,6 +185,34 @@
                 },
             });
 
+                        // FAR DATA
+                        map.addSource("far-data", {
+                type: "vector",
+                url: "pmtiles://" + FAR_DATA_URL,
+            });
+            map.addLayer({
+                id: "far-data-layer",
+                type: "fill",
+                source: "far-data",
+                "source-layer": "far",
+                paint: {
+                    "fill-color": "#000000",
+                    "fill-opacity": 0,
+                },
+            });
+            map.addLayer({
+                id: "far-data-line",
+                type: "line",
+                source: "far-data",
+                "source-layer": "far",
+                paint: {
+                    "line-color": "#fff",
+                    "line-width": 0.1,
+                    "line-opacity": 0.5,
+                },
+                minzoom: 13.5,
+            });
+
             // MASSING LAYER
             map.addSource("massing", {
                 type: "vector",
@@ -217,33 +245,7 @@
                 },
             });
 
-            // FAR DATA
-            map.addSource("far-data", {
-                type: "vector",
-                url: "pmtiles://" + FAR_DATA_URL,
-            });
-            map.addLayer({
-                id: "far-data-layer",
-                type: "fill",
-                source: "far-data",
-                "source-layer": "far",
-                paint: {
-                    "fill-color": "#000000",
-                    "fill-opacity": 0,
-                },
-            });
-            map.addLayer({
-                id: "far-data-line",
-                type: "line",
-                source: "far-data",
-                "source-layer": "far",
-                paint: {
-                    "line-color": "#fff",
-                    "line-width": 0.1,
-                    "line-opacity": 0.5,
-                },
-                minzoom: 13.5,
-            });
+
 
             //HOVER FAR LABELS
             const popup = new maplibregl.Popup({

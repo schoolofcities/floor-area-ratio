@@ -26,12 +26,29 @@
 
     const toggle3DVisibility = () => {
         is3DVisible = !is3DVisible;
+
         if (map.getLayer("massing-layer")) {
             map.setLayoutProperty(
                 "massing-layer",
                 "visibility",
-                is3DVisible ? "visible" : "none",
+                is3DVisible ? "visible" : "none"
             );
+        }
+
+        if (is3DVisible) {
+            map.setMaxPitch(60);
+            map.easeTo({
+                pitch: 45,
+                duration: 1000,
+            });
+            map.dragRotate.enable();
+            map.dragRotate.setPitchWithRotate(true);
+            map.touchZoomRotate.enableRotation();
+        } else {
+            map.easeTo({
+                pitch: 0, 
+                duration: 1000, 
+            });
         }
     };
 
@@ -64,7 +81,7 @@
             bearing: -17,
             scrollZoom: true,
             minZoom: 10.5,
-            // maxPitch: 0,
+            maxPitch: 0,
             maxBounds: [
                 [-79.8, 43.35],
                 [-79.0, 43.9],
@@ -83,9 +100,9 @@
         window.addEventListener("resize", () => {
             // MOVE SCALE BAR
             if (window.innerWidth < 750 && map.hasControl(scale)) {
-                map.removeControl(scale); // Remove the scale bar if screen width is less than 750px
+                map.removeControl(scale);
             } else if (window.innerWidth >= 750 && !map.hasControl(scale)) {
-                map.addControl(scale, "bottom-right"); // Add the scale bar back if screen width is 750px or more
+                map.addControl(scale, "bottom-right"); 
             }
 
             // TEXT

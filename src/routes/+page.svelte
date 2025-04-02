@@ -232,6 +232,18 @@
                     "fill-opacity": 0,
                 },
             });
+            map.addLayer({
+                id: "far-data-line",
+                type: "line",
+                source: "far-data",
+                "source-layer": "far",
+                paint: {
+                    "line-color": "#fff",
+                    "line-width": 0.1,
+                    "line-opacity": 0.5,
+                },
+                minzoom: 13.5,
+            });
 
             //HOVER FAR LABELS
             const popup = new maplibregl.Popup({

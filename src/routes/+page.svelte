@@ -200,7 +200,27 @@
                     "fill-opacity": 0,
                 },
             });
-            map.addLayer({
+map.addLayer({
+    id: "far-data-line",
+    type: "line",
+    source: "far-data",
+    "source-layer": "far",
+    paint: {
+        "line-color": "#fff",
+        "line-width": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            13.5, 0.1, // At zoom level 13.5, line width is 0.1
+            18, 2.0    // At zoom level 18, line width is 2.0
+        ],
+        "line-opacity": 0.5,
+    },
+    minzoom: 13.5,
+});
+
+            // add zoom dependent line width
+                        map.addLayer({
                 id: "far-data-line",
                 type: "line",
                 source: "far-data",
@@ -296,7 +316,7 @@
 
 </svelte:head>
 
-<div id="box">
+<div id="box" style="height: {isTextVisible ? '100vh' : '30vh'};">
     <div class="title">
         <h3>Toronto FAR Map</h3>
     </div>

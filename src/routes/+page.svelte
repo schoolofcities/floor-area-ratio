@@ -52,12 +52,18 @@
         }
     };
 
-    let isTextVisible = true;
+    let isTextVisible;
     const toggleTextVisibility = () => {
         isTextVisible = !isTextVisible;
     };
 
     onMount(async () => {
+        if (window.innerWidth < 750) {
+            isTextVisible = false;
+        } else {
+            isTextVisible = true;
+        }
+
         const protocol = new pmtiles.Protocol();
         maplibregl.addProtocol("pmtiles", protocol.tile);
 
@@ -316,18 +322,10 @@ map.addLayer({
 
 </svelte:head>
 
-<div id="box" style="height: {isTextVisible ? '100vh' : '30vh'};">
+<div id="box" style="height: {isTextVisible ? 'calc(100vh - 40px)' : '30vh'}; ">
     <div class="title">
         <h3>Toronto FAR Map</h3>
     </div>
-
-    <button
-        class="btn toggle-text-btn"
-        on:click={toggleTextVisibility}
-        style="margin-bottom: 10px;"
-    >
-        {isTextVisible ? "Hide Info" : "Show Info"}
-    </button>
 
     <div class="text" style="display: {isTextVisible ? 'block' : 'none'};">
         <p><strong>What is Floor Area Ratio (FAR)?</strong></p>
@@ -383,7 +381,7 @@ map.addLayer({
             />
         </p>
         <p>
-            Download the FAR data as a GeoJSON file <a href="#">here</a>.
+            Download the FAR data as a CSV file <a href="/static/toronto_far.csv" download>here</a>.
         </p>
 
         <small>
@@ -396,34 +394,46 @@ map.addLayer({
         </small>
     </div>
 
-    <button
-    class="btn toggle-3d-btn"
-    on:click={toggle3DVisibility}
-    style="margin-top: 10px;"
->
-    {is3DVisible ? "Hide 3D Buildings" : "Show 3D Buildings"}
-</button>
-
-    <div id="legend">
-        <svg xmlns="http://www.w3.org/2000/svg" width="250" height="50">
-            <!-- <text x="0" y="20" font-size="16" font-weight="bold" 
-                >Floor Area Ratio (FAR)</text
-            > -->
-            <rect x="0%" y="10" width="20%" height="15" fill="#f6eff7" />
-            <rect x="20%" y="10" width="20%" height="15" fill="#bdc9e1" />
-            <rect x="40%" y="10" width="20%" height="15" fill="#67a9cf" />
-            <rect x="60%" y="10" width="20%" height="15" fill="#1c9099" />
-            <rect x="80%" y="10" width="20%" height="15" fill="#016c59" />
-            <text x="0%" y="45" font-size="12">0</text>
-            <text x="20%" y="45" font-size="12">0.5</text>
-            <text x="40%" y="45" font-size="12">1.0</text>
-            <text x="60%" y="45" font-size="12">2.0</text>
-            <text x="80%" y="45" font-size="12">5.0 +</text>
-        </svg>
-    </div>
 
 
     <div class="bottom-content">
+
+        <button
+        class="btn toggle-3d-btn"
+        on:click={toggle3DVisibility}
+        style="margin-top: 10px;"
+    >
+        {is3DVisible ? "Hide 3D Buildings" : "Show 3D Buildings"}
+    </button>
+
+    <button
+    class="btn toggle-text-btn"
+    on:click={toggleTextVisibility}
+    style="margin-bottom: 10px;"
+>
+    {isTextVisible ? "Hide Info" : "Show Info"}
+</button>
+
+        <div id="legend">
+            <svg xmlns="http://www.w3.org/2000/svg" width="250" height="50">
+                <!-- <text x="0" y="20" font-size="16" font-weight="bold" 
+                    >Floor Area Ratio (FAR)</text
+                > -->
+                <rect x="0%" y="10" width="20%" height="15" fill="#f6eff7" />
+                <rect x="20%" y="10" width="20%" height="15" fill="#bdc9e1" />
+                <rect x="40%" y="10" width="20%" height="15" fill="#67a9cf" />
+                <rect x="60%" y="10" width="20%" height="15" fill="#1c9099" />
+                <rect x="80%" y="10" width="20%" height="15" fill="#016c59" />
+                <text x="0%" y="45" font-size="12">0</text>
+                <text x="20%" y="45" font-size="12">0.5</text>
+                <text x="40%" y="45" font-size="12">1.0</text>
+                <text x="60%" y="45" font-size="12">2.0</text>
+                <text x="80%" y="45" font-size="12">5.0 +</text>
+            </svg>
+        </div>
+    
+
+
         <a href="https://schoolofcities.utoronto.ca/" target="_blank">
             <img class="logo" src="src/assets/top-logo-full.svg" alt="Logo" />
         </a>
@@ -450,10 +460,9 @@ map.addLayer({
         height: calc(100vh - 40px);
         padding: 1rem;
         box-sizing: border-box;
-
         position: absolute;
         margin: 20px;
-        padding: 20px;
+        padding:20px;
         width: 300px;
         border-radius: 0.8em;
         background-color: rgba(255, 255, 255, 0.9);
@@ -463,20 +472,18 @@ map.addLayer({
 
     .title {
         margin: 0 0 0 0;
+        align-self: center;
     }
 
     .text {
         flex-grow: 1;
         overflow-y: auto;
+        /* border: #ccc 1px solid; */
     }
+    
 
     h3 {
         margin: 0;
-    }
-
-    .bottom-content {
-        display: flex;
-        flex-direction: column;
     }
 
     .toggle-text-btn {
@@ -497,15 +504,16 @@ map.addLayer({
         border-radius: 5px;
         border: 1px solid #ccc;
         cursor: pointer;
+        margin: 10px 0;
     }
 
     #legend {
-        margin: 10px;
+        margin: 0 10px;
     }
 
     .logo {
         width: 250px;
-        margin-top: 20px;
+        margin-top: 10px;
     }
 
     @media screen and (min-width: 750px) {
@@ -523,45 +531,45 @@ map.addLayer({
         #box {
             position: absolute;
             bottom: 0;
-            height: 40vh;
-            left: 0;
+            /* height: 40vh; */
+            /* left: 0; */
             width: calc(100vw - 40px);
             /* height: 300px; */
-            margin: 20px;
-            padding: 20px;
-            overflow: hidden;
+            /* margin: 20px;
+            padding: 20px; */
+            /* overflow: hidden; */
         }
 
         .text {
-            max-height: 15vh;
+            flex-grow: 1;
+            overflow-y: auto;
+
         }
 
         .logo {
-            max-width: 250px;
-            width: 50vw;
+            /* max-width: 250px;
+            width: 50vw; */
         }
 
         .bottom-content {
-            /* display: flex;
-            flex-direction: column;
-            position: absolute;
-            bottom: 20px; */
+            position: relative;
+            margin-top: auto;
         }
 
         .toggle-text-btn {
-            position: fixed;
+            /* position: fixed;
             bottom: 90px;
             right: 40px;
             width: 30vw;
-            font-size: 9pt;
+            font-size: 9pt; */
         }
 
         .toggle-3d-btn {
-            position: fixed;
+            /* position: fixed;
             bottom: 45px;
             right: 40px;
             width: 30vw;
-            font-size: 9pt;
+            font-size: 9pt; */
         }
 
         .far-diagram {

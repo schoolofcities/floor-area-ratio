@@ -5,11 +5,12 @@
     import "maplibre-gl/dist/maplibre-gl.css";
 
     import * as pmtiles from "pmtiles";
-    import BaseLayer from "../assets/toronto.json";
+    import baseMap from "../assets/basemap.json";
+    import topMap from "../assets/topmap.json";
 
     let MASSING_URL = "MASSING_FAR.pmtiles";
-    let FAR_DATA_URL = "FAR-DATA.pmtiles";
-    let FAR_PROPERTY_URL = "FAR-PROPERTY.pmtiles";
+    let FAR_DATA_URL = "FAR_DATA.pmtiles";
+    let FAR_PROPERTY_URL = "FAR_PROPERTY.pmtiles";
 
     let map;
     let is3DVisible = false;
@@ -19,11 +20,6 @@
         unit: "metric",
     });
 
-    const attributionString = [
-        '<a href="https://openstreetmap.org">OpenStreetMap</a>',
-        '<a href="https://open.toronto.ca/">City of Toronto</a>',
-    ].join(", ");
-
     const toggle3DVisibility = () => {
         is3DVisible = !is3DVisible;
 
@@ -31,7 +27,7 @@
             map.setLayoutProperty(
                 "massing-layer",
                 "visibility",
-                is3DVisible ? "visible" : "none"
+                is3DVisible ? "visible" : "none",
             );
         }
 
@@ -46,8 +42,8 @@
             map.touchZoomRotate.enableRotation();
         } else {
             map.easeTo({
-                pitch: 0, 
-                duration: 1000, 
+                pitch: 0,
+                duration: 1000,
             });
         }
     };
@@ -57,31 +53,30 @@
         isTextVisible = !isTextVisible;
     };
 
-    onMount(async () => {
-        if (window.innerWidth < 750) {
-            isTextVisible = false;
-        } else {
-            isTextVisible = true;
-        }
+    let currentWidth = 0;
+    let previousWidth = 0;
 
+    function updateScreenWidth() {
+        previousWidth = currentWidth;
+        currentWidth = window.innerWidth;
+
+        // Update isTextVisible based on screen width
+        if (previousWidth <= 600 && currentWidth > 600) {
+            isTextVisible = true;
+            console.log("Text is visible");
+        } else if (previousWidth > 600 && currentWidth <= 600) {
+            isTextVisible = false;
+            console.log("Text is hidden");
+        }
+    }
+
+    onMount(async () => {
         const protocol = new pmtiles.Protocol();
         maplibregl.addProtocol("pmtiles", protocol.tile);
 
         map = new maplibregl.Map({
             container: "map",
-            style: {
-                version: 8,
-                name: "Empty",
-                glyphs: "https://schoolofcities.github.io/fonts/fonts/{fontstack}/{range}.pbf",
-                sources: {},
-                layers: [
-                    {
-                        id: "background",
-                        type: "background",
-                        paint: { "background-color": "rgba(0,0,0,0)" },
-                    },
-                ],
-            },
+            style: baseMap,
             center: [-79.409168, 43.650783],
             zoom: 11.6,
             bearing: -17,
@@ -95,30 +90,6 @@
             attributionControl: false,
         });
 
-        //MAP INTERACTIONS
-        map.boxZoom.disable();
-
-        if (window.innerWidth >= 750) {
-            map.addControl(scale, "bottom-right");
-        }
-
-        //RESIZE EVENTS
-        window.addEventListener("resize", () => {
-            // MOVE SCALE BAR
-            if (window.innerWidth < 750 && map.hasControl(scale)) {
-                map.removeControl(scale);
-            } else if (window.innerWidth >= 750 && !map.hasControl(scale)) {
-                map.addControl(scale, "bottom-right"); 
-            }
-
-            // TEXT
-            if (window.innerWidth >= 750) {
-                isTextVisible = true;
-            }
-            if (window.innerWidth < 750) {
-                isTextVisible = false;
-            }
-        });
         map.addControl(
             new maplibregl.NavigationControl({
                 showCompass: true,
@@ -126,6 +97,34 @@
             }),
             "top-right",
         );
+
+        //MAP INTERACTIONS
+        map.boxZoom.disable();
+
+        if (window.innerWidth >= 600) {
+            map.addControl(scale, "bottom-right");
+        }
+
+        // ON MOUNT TEXT DISPLAY
+        if (window.innerWidth >= 600) {
+            isTextVisible = true;
+        }
+        if (window.innerWidth < 600) {
+            isTextVisible = false;
+        }
+
+        updateScreenWidth();
+        window.addEventListener("resize", updateScreenWidth);
+
+        //RESIZE EVENTS
+        window.addEventListener("resize", () => {
+            //MOVE SCALE BAR
+            if (window.innerWidth < 600 && map.hasControl(scale)) {
+                map.removeControl(scale);
+            } else if (window.innerWidth >= 600 && !map.hasControl(scale)) {
+                map.addControl(scale, "bottom-right");
+            }
+        });
 
         map.on("load", () => {
             //CONSOLE LOG MAP POSITION
@@ -147,22 +146,18 @@
             });
 
             //MAP POSITION ON MOBILE LOAD
-            if (window.innerWidth < 750) {
+            if (window.innerWidth < 600) {
                 map.jumpTo({
-                    center: [-79.374801, 43.641761],
+                    center: [-79.374384, 43.630475],
                     zoom: 11.6,
                     bearing: -17,
                 });
             }
 
             //BASE MAP
-            map.addSource("protomaps", {
-                type: "vector",
-                url: "pmtiles://toronto.pmtiles",
-                attribution: attributionString,
+            topMap.forEach((e) => {
+                map.addLayer(e);
             });
-
-            BaseLayer.forEach((layer) => map.addLayer(layer));
 
             // FAR COLOUR LAYER
             map.addSource("far-colour", {
@@ -177,22 +172,24 @@
                 paint: {
                     "fill-color": [
                         "case",
-                        ["<", ["get", "far"], 0.5],
-                        "#f6eff7",
+                        ["<", ["get", "far"], 0.1],
+                        "rgba(0,0,0,0)", // 0.1 <
                         ["<", ["get", "far"], 1.0],
-                        "#bdc9e1",
+                        "#c8d1e5", // 0.1 - 1.0
                         ["<", ["get", "far"], 2.0],
-                        "#67a9cf",
+                        "#89b6d6", // 1.0 - 2.0
                         ["<", ["get", "far"], 5.0],
-                        "#1c9099",
-                        "#016c59",
+                        "#499fb9", // 2.0 - 5.0
+                        ["<", ["get", "far"], 15.0],
+                        "#17898c", // 5.0 - 15.0
+                        "#015847", // > 15.0
                     ],
                     "fill-opacity": 1,
                 },
             });
 
-                        // FAR DATA
-                        map.addSource("far-data", {
+            // FAR DATA
+            map.addSource("far-data", {
                 type: "vector",
                 url: "pmtiles://" + FAR_DATA_URL,
             });
@@ -206,27 +203,29 @@
                     "fill-opacity": 0,
                 },
             });
-map.addLayer({
-    id: "far-data-line",
-    type: "line",
-    source: "far-data",
-    "source-layer": "far",
-    paint: {
-        "line-color": "#fff",
-        "line-width": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            13.5, 0.1, // At zoom level 13.5, line width is 0.1
-            18, 2.0    // At zoom level 18, line width is 2.0
-        ],
-        "line-opacity": 0.5,
-    },
-    minzoom: 13.5,
-});
+            map.addLayer({
+                id: "far-data-line",
+                type: "line",
+                source: "far-data",
+                "source-layer": "far",
+                paint: {
+                    "line-color": "#fff",
+                    "line-width": [
+                        "interpolate",
+                        ["linear"],
+                        ["zoom"],
+                        13.5,
+                        0.1, // At zoom level 13.5, line width is 0.1
+                        18,
+                        1, // At zoom level 18, line width is 2.0
+                    ],
+                    "line-opacity": 0.5,
+                },
+                minzoom: 13.5,
+            });
 
             // add zoom dependent line width
-                        map.addLayer({
+            map.addLayer({
                 id: "far-data-line",
                 type: "line",
                 source: "far-data",
@@ -238,6 +237,12 @@ map.addLayer({
                 },
                 minzoom: 13.5,
             });
+
+                        //MOVING ROAD LABELS TO THE TOP
+                        map.moveLayer("roadname_minor");
+            map.moveLayer("roadname_sec");
+            map.moveLayer("roadname_pri");
+            map.moveLayer("roadname_major");
 
             // MASSING LAYER
             map.addSource("massing", {
@@ -252,15 +257,17 @@ map.addLayer({
                 paint: {
                     "fill-extrusion-color": [
                         "case",
-                        ["<", ["get", "far"], 0.5],
-                        "#f6eff7",
-                        ["<", ["get", "far"], 1.0],
-                        "#bdc9e1",
-                        ["<", ["get", "far"], 2.0],
-                        "#67a9cf",
-                        ["<", ["get", "far"], 5.0],
-                        "#1c9099",
-                        "#016c59",
+                        ["<", ["get", "far"], 0.1],
+                        "#f2f2f2", // 0.1 >
+                        ["<=", ["get", "far"], 1.0],
+                        "#c8d1e5", // 0.1 - 1.0
+                        ["<=", ["get", "far"], 2.0],
+                        "#89b6d6", // 1.0 - 2.0
+                        ["<=", ["get", "far"], 5.0],
+                        "#499fb9", // 2.0 - 5.0
+                        ["<=", ["get", "far"], 15.0],
+                        "#17898c", // 5.0 - 15.0
+                        "#015847", // > 15.0
                     ],
                     "fill-extrusion-height": ["get", "AVG_HEIGHT"],
                     "fill-extrusion-base": 0,
@@ -270,8 +277,6 @@ map.addLayer({
                     visibility: "none",
                 },
             });
-
-
 
             //HOVER FAR LABELS
             const popup = new maplibregl.Popup({
@@ -302,13 +307,6 @@ map.addLayer({
             map.on("mouseleave", "far-data-layer", () => {
                 popup.remove();
             });
-
-            //MOVING LABELS TO THE TOP
-            map.moveLayer("roads_labels_minor");
-            map.moveLayer("roads_labels_major");
-            map.moveLayer("places_subplace");
-            map.moveLayer("pois_important");
-            map.moveLayer("places_locality");
         });
     });
 </script>
@@ -319,16 +317,18 @@ map.addLayer({
         content="width=device-width, initial-scale=1, minimum-scale=1"
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-
 </svelte:head>
 
-<div id="box" style="height: {isTextVisible ? 'calc(100vh - 40px)' : '30vh'}; ">
+<div
+    id="box"
+    style="height: {isTextVisible ? 'calc(100vh - 30px)' : '240px'}; "
+>
     <div class="title">
         <h3>Toronto FAR Map</h3>
     </div>
 
     <div class="text" style="display: {isTextVisible ? 'block' : 'none'};">
-        <p><strong>What is Floor Area Ratio (FAR)?</strong></p>
+        <h4>What is Floor Area Ratio (FAR)?</h4>
         <p>
             <a href="https://jamaps.github.io/" target="_blank">Jeff Allen</a>,
             <a
@@ -340,7 +340,22 @@ map.addLayer({
             FAR is a measure of a building's total floor area relative to the
             size of its lot. It is calculated as:
         </p>
-        <p><em>FAR = Total Building Floor Area ÷ Lot Area</em></p>
+        <p class="equation">
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <mrow>
+                    <mi>FAR</mi>
+                    <mo>=</mo>
+                    <mfrac>
+                        <mrow>
+                            <mi>Total Building Floor Area</mi>
+                        </mrow>
+                        <mrow>
+                            <mi>Lot Area</mi>
+                        </mrow>
+                    </mfrac>
+                </mrow>
+            </math>
+        </p>
         <p>
             Higher FAR values indicate denser development, while lower values
             suggest less intensive land use.
@@ -352,21 +367,57 @@ map.addLayer({
             while maintaining the same FAR:
         </p>
 
-        <p style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-            <img class="far-diagram" src="/src/assets/far-a.svg" alt="FAR Diagram" /> <small>FAR: 1.0</small>
-            <img class="far-diagram" src="/src/assets/far-b.svg" alt="FAR Diagram" /> <small>FAR: 1.0</small>
-            <img class="far-diagram" src="/src/assets/far-c.svg" alt="FAR Diagram" /> <small>FAR: 1.0</small>
+        <p
+            style="display: flex; flex-direction: column; justify-content: center; align-items: center;"
+        >
+            <img
+                class="far-diagram"
+                src="/src/assets/far-a.svg"
+                alt="FAR Diagram"
+            /> <small>FAR: 1.0</small>
+            <img
+                class="far-diagram"
+                src="/src/assets/far-b.svg"
+                alt="FAR Diagram"
+            /> <small>FAR: 1.0</small>
+            <img
+                class="far-diagram"
+                src="/src/assets/far-c.svg"
+                alt="FAR Diagram"
+            /> <small>FAR: 1.0</small>
         </p>
         <p></p>
-        <p><strong>Methodology</strong></p>
+        <h4>Methodology</h4>
         <p>
-            This visualization was created using 3D massing and property line
-            data from
+            This visualization was created using 3D massing and property
+            boundary data from
             <a href="https://open.toronto.ca/" target="_blank"
                 >the City of Toronto’s Open Data Portal</a
-            >. For the FAR calculations, we assumed an average building floor
+            >.
+        </p>
+
+        <p>
+            For the FAR calculations, we assumed an average building floor
             height of 3 meters.
         </p>
+
+        <h4>Data</h4>
+        <ul>
+            <li>
+                <a
+                    href="https://open.toronto.ca/dataset/3d-massing/"
+                    target="_blank">3D Massing</a
+                >
+            </li>
+            <li>
+                <a
+                    href="https://open.toronto.ca/dataset/property-boundaries/"
+                    target="_blank">Property Boundaries</a
+                >
+            </li>
+            <li><a href="/static/toronto_far.csv">FAR Data</a></li>
+        </ul>
+
         <p>
             Explore the project on
             <a
@@ -380,59 +431,46 @@ map.addLayer({
                 style=" height: 15px; vertical-align: center; padding: 0 3px;"
             />
         </p>
-        <p>
-            Download the FAR data as a CSV file <a href="/static/toronto_far.csv" download>here</a>.
-        </p>
 
-        <small>
+        <p>
             Map attributions: <br /><a
                 target="_blank"
                 href="https://openstreetmap.org">OpenStreetMap</a
             >, <br /><a target="_blank" href="https://open.toronto.ca/"
                 >City of Toronto</a
             >
-        </small>
+        </p>
     </div>
 
-
-
     <div class="bottom-content">
-
         <button
-        class="btn toggle-3d-btn"
-        on:click={toggle3DVisibility}
-        style="margin-top: 10px;"
-    >
-        {is3DVisible ? "Hide 3D Buildings" : "Show 3D Buildings"}
-    </button>
-
-    <button
-    class="btn toggle-text-btn"
-    on:click={toggleTextVisibility}
-    style="margin-bottom: 10px;"
->
-    {isTextVisible ? "Hide Info" : "Show Info"}
-</button>
+            class="btn toggle-text-btn"
+            on:click={toggleTextVisibility}
+            style="margin-bottom: 10px; font-size: 12px;"
+        >
+            {isTextVisible ? "▼" : "▲"}
+        </button>
 
         <div id="legend">
+            <div
+                id="legend-title"
+                style="text-align: center; font-size: 14px; margin-bottom: 5px;"
+            >
+                Floor Area Ratio (FAR)
+            </div>
             <svg xmlns="http://www.w3.org/2000/svg" width="250" height="50">
-                <!-- <text x="0" y="20" font-size="16" font-weight="bold" 
-                    >Floor Area Ratio (FAR)</text
-                > -->
-                <rect x="0%" y="10" width="20%" height="15" fill="#f6eff7" />
-                <rect x="20%" y="10" width="20%" height="15" fill="#bdc9e1" />
-                <rect x="40%" y="10" width="20%" height="15" fill="#67a9cf" />
-                <rect x="60%" y="10" width="20%" height="15" fill="#1c9099" />
-                <rect x="80%" y="10" width="20%" height="15" fill="#016c59" />
-                <text x="0%" y="45" font-size="12">0</text>
-                <text x="20%" y="45" font-size="12">0.5</text>
-                <text x="40%" y="45" font-size="12">1.0</text>
-                <text x="60%" y="45" font-size="12">2.0</text>
-                <text x="80%" y="45" font-size="12">5.0 +</text>
+                <rect x="0%" y="10" width="20%" height="15" fill="#c8d1e5" />
+                <rect x="20%" y="10" width="20%" height="15" fill="#89b6d6" />
+                <rect x="40%" y="10" width="20%" height="15" fill="#499fb9" />
+                <rect x="60%" y="10" width="20%" height="15" fill="#17898c" />
+                <rect x="80%" y="10" width="20%" height="15" fill="#015847" />
+                <text x="0%" y="45" font-size="12">0.1</text>
+                <text x="20%" y="45" font-size="12">1.0</text>
+                <text x="40%" y="45" font-size="12">2.0</text>
+                <text x="60%" y="45" font-size="12">5.0</text>
+                <text x="80%" y="45" font-size="12">15.0+</text>
             </svg>
         </div>
-    
-
 
         <a href="https://schoolofcities.utoronto.ca/" target="_blank">
             <img class="logo" src="src/assets/top-logo-full.svg" alt="Logo" />
@@ -440,9 +478,39 @@ map.addLayer({
     </div>
 </div>
 
+<button
+    class="btn toggle-3d-btn {is3DVisible ? 'active' : ''}"
+    on:click={toggle3DVisibility}
+    style="margin-top: 10px;"
+>
+    {is3DVisible ? "3D" : "3D"}
+</button>
+
 <div id="map"></div>
 
 <style>
+    #legend-title {
+        font-family: TradeGothicBold;
+    }
+
+    .btn.toggle-3d-btn {
+        position: fixed;
+        top: 95px;
+        right: 8px;
+        width: 32px;
+        font-size: 10pt;
+        background-color: white;
+        padding: 5px;
+        border-radius: 5px;
+        border: 2px solid rgb(228, 228, 228);
+        cursor: pointer;
+        font-weight: regular;
+    }
+
+    .btn.toggle-3d-btn.active {
+        background-color: #e0e0e0;
+    }
+
     a:hover .logo {
         opacity: 0.7;
     }
@@ -457,43 +525,46 @@ map.addLayer({
     #box {
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 40px);
+        justify-content: flex-end;
         padding: 1rem;
         box-sizing: border-box;
         position: absolute;
-        margin: 20px;
-        padding:20px;
-        width: 300px;
+        margin: 15px;
+        padding: 20px;
+        width: 350px;
         border-radius: 0.8em;
         background-color: rgba(255, 255, 255, 0.9);
         border: 1px solid #ccc;
         overflow: hidden;
+        bottom: 0;
     }
 
     .title {
-        margin: 0 0 0 0;
+        margin: 0 0 5px 0;
         align-self: center;
+        font-family: TradeGothicBold;
     }
 
     .text {
         flex-grow: 1;
         overflow-y: auto;
-        /* border: #ccc 1px solid; */
+        font-family: SourceSerif;
     }
-    
 
     h3 {
         margin: 0;
     }
 
     .toggle-text-btn {
-        background-color: white;
+        background-color: rgba(0, 0, 0, 0);
         color: black;
-        padding: 5px;
-        width: 150px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
+        padding: 5px 0 0 0;
+        width: 100%;
+        border: 0px solid #ccc;
         cursor: pointer;
+        /* border-bottom: #ccc 1px solid; */
+        border-top: #ccc 1px solid;
+        font-size: 12pt;
     }
 
     .toggle-3d-btn {
@@ -504,11 +575,12 @@ map.addLayer({
         border-radius: 5px;
         border: 1px solid #ccc;
         cursor: pointer;
-        margin: 10px 0;
+        margin: 0 0;
     }
 
     #legend {
         margin: 0 10px;
+        width: 250px;
     }
 
     .logo {
@@ -516,60 +588,42 @@ map.addLayer({
         margin-top: 10px;
     }
 
-    @media screen and (min-width: 750px) {
-        .toggle-text-btn {
-            display: none; /* Hide the button on larger screens */
-        }
-    }
-
     .far-diagram {
         width: 150px;
         height: auto;
     }
 
-    @media screen and (max-width: 750px) {
+    .bottom-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .equation {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 10px 0;
+        
+    }
+
+ mi {
+    font-size: 15px;
+    font-style: italic;
+    padding: 5px;
+ }
+
+    @media screen and (max-width: 600px) {
         #box {
             position: absolute;
             bottom: 0;
-            /* height: 40vh; */
-            /* left: 0; */
-            width: calc(100vw - 40px);
-            /* height: 300px; */
-            /* margin: 20px;
-            padding: 20px; */
-            /* overflow: hidden; */
+            width: calc(100% - 30px);
+            z-index: 1;
         }
 
         .text {
             flex-grow: 1;
             overflow-y: auto;
-
-        }
-
-        .logo {
-            /* max-width: 250px;
-            width: 50vw; */
-        }
-
-        .bottom-content {
-            position: relative;
-            margin-top: auto;
-        }
-
-        .toggle-text-btn {
-            /* position: fixed;
-            bottom: 90px;
-            right: 40px;
-            width: 30vw;
-            font-size: 9pt; */
-        }
-
-        .toggle-3d-btn {
-            /* position: fixed;
-            bottom: 45px;
-            right: 40px;
-            width: 30vw;
-            font-size: 9pt; */
         }
 
         .far-diagram {

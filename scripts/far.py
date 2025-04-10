@@ -16,7 +16,7 @@ floor_height = 3
 output_csv = "static/toronto_far.csv"
 output_shp = "results/far/far.shp"
 output_geojson = "results/far/far.geojson"
-output_geopackage = "results/far/far.gpkg"
+# output_geopackage = "results/far/far.gpkg"
 
 # Load shapefiles
 print("📂 Loading shapefiles...")
@@ -98,22 +98,24 @@ boundary['far'] = boundary['far'].fillna(0).round(2)
 # Categorize FAR values into buckets
 print("📊 Categorizing FAR values into buckets...")
 def categorize_far(far):
-    if far <= 0.5:
-        return "0-0.5"
+    if far <= 0.1:
+        return "0-0.1"
     elif far <= 1:
-        return "0.5-1"
+        return "0.1-1"
     elif far <= 2:
         return "1-2"
     elif far <= 5:
         return "2-5"
+    elif far <= 15:
+        return "5-15"
     else:
-        return "5+"
+        return "15+"
 
 boundary['far_bucket'] = boundary['far'].apply(categorize_far)
 
 # Dissolve features by FAR buckets
-# print("🧩 Dissolving features by FAR buckets...")
-# boundary_dissolved = boundary.dissolve(by='far_bucket', as_index=False)
+print("🧩 Dissolving features by FAR buckets...")
+boundary_dissolved = boundary.dissolve(by='far_bucket', as_index=False)
 
 # Join FAR and FAR bucket values to split buildings
 print("🔗 Joining FAR and FAR bucket values to split buildings...")
@@ -123,28 +125,30 @@ buildings_split = buildings_split.merge(boundary[['boundary_id', 'far', 'far_buc
 print("🧹 Keeping only selected fields: boundary_id, AVG_HEIGHT, far, far_bucket...")
 buildings_split = buildings_split[['boundary_id', 'AVG_HEIGHT', 'far', 'far_bucket', 'geometry']]
 
-# print(buildings_split.head())
-
 # Save buildings_split as GeoJSON
 output_buildings_geojson = "results/far/buildings_split.geojson"
 print(f"💾 Saving split buildings to: {output_buildings_geojson}")
 buildings_split.to_file(output_buildings_geojson, driver="GeoJSON")
 
-# # Save output as Shapefile
-# print("💾 Saving to: {output_shp}")
-# boundary.to_file(output_shp, driver="ESRI Shapefile")
-
 # # Drop all columns except for "OBJECTID", "far", and "far_bucket"
-# print("🧹 Dropping unnecessary columns...")
-# boundary = boundary[["OBJECTID", "far", "geometry"]]
+print("🧹 Dropping unnecessary columns...")
+boundary = boundary[["OBJECTID", "far", "geometry"]]
+boundary_dissolved = boundary_dissolved[["OBJECTID", "far", "geometry"]]
 
 # # # Save output as GeoJSON
-# print("💾 Saving to: {output_geojson}")
+print("💾 Saving to: {output_geojson}")
 # boundary.to_file(output_geojson, driver="GeoJSON")
+boundary_dissolved.to_file(output_geojson, driver="GeoJSON")
+
 
 # # Save output as GeoPackage
 # print(f"💾 Saving to: {output_geopackage}")
 # boundary.to_file(output_geopackage, driver="GPKG", layer="boundary")
+
+# # Save output as Shapefile
+print("💾 Saving to: {output_shp}")
+# boundary.to_file(output_shp, driver="ESRI Shapefile")
+boundary_dissolved.to_file(output_shp, driver="ESRI Shapefile")
 
 # Convert OBJECTID to integer
 boundary["OBJECTID"] = pd.to_numeric(boundary["OBJECTID"], errors="coerce").fillna(0).astype(int)
@@ -152,8 +156,6 @@ boundary["OBJECTID"] = pd.to_numeric(boundary["OBJECTID"], errors="coerce").fill
 # Save OBJECTID and FAR to a CSV file
 print(f"💾 Saving OBJECTID and FAR to: {output_csv}")
 boundary[["OBJECTID", "far"]].to_csv(output_csv, index=False)
-
-# Save output as geopackage
 
 # Done
 print("✅ Done! Sample output:")

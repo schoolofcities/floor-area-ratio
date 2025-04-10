@@ -61,10 +61,10 @@
         currentWidth = window.innerWidth;
 
         // Update isTextVisible based on screen width
-        if (previousWidth <= 600 && currentWidth > 600) {
+        if (previousWidth <= 750 && currentWidth > 750) {
             isTextVisible = true;
             console.log("Text is visible");
-        } else if (previousWidth > 600 && currentWidth <= 600) {
+        } else if (previousWidth > 750 && currentWidth <= 750) {
             isTextVisible = false;
             console.log("Text is hidden");
         }
@@ -101,15 +101,15 @@
         //MAP INTERACTIONS
         map.boxZoom.disable();
 
-        if (window.innerWidth >= 600) {
+        if (window.innerWidth >= 750) {
             map.addControl(scale, "bottom-right");
         }
 
         // ON MOUNT TEXT DISPLAY
-        if (window.innerWidth >= 600) {
+        if (window.innerWidth >= 750) {
             isTextVisible = true;
         }
-        if (window.innerWidth < 600) {
+        if (window.innerWidth < 750) {
             isTextVisible = false;
         }
 
@@ -119,9 +119,9 @@
         //RESIZE EVENTS
         window.addEventListener("resize", () => {
             //MOVE SCALE BAR
-            if (window.innerWidth < 600 && map.hasControl(scale)) {
+            if (window.innerWidth < 750 && map.hasControl(scale)) {
                 map.removeControl(scale);
-            } else if (window.innerWidth >= 600 && !map.hasControl(scale)) {
+            } else if (window.innerWidth >= 750 && !map.hasControl(scale)) {
                 map.addControl(scale, "bottom-right");
             }
         });
@@ -146,7 +146,7 @@
             });
 
             //MAP POSITION ON MOBILE LOAD
-            if (window.innerWidth < 600) {
+            if (window.innerWidth < 750) {
                 map.jumpTo({
                     center: [-79.374384, 43.630475],
                     zoom: 11.6,
@@ -613,7 +613,7 @@
     padding: 5px;
  }
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 750px) {
         #box {
             position: absolute;
             bottom: 0;

@@ -34,7 +34,7 @@
         if (is3DVisible) {
             map.setMaxPitch(60);
             map.easeTo({
-                pitch: 45,
+                pitch: 60,
                 duration: 1000,
             });
             map.dragRotate.enable();

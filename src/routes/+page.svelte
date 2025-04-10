@@ -35,7 +35,7 @@
             map.setMaxPitch(60);
             map.easeTo({
                 pitch: 60,
-                duration: 1000,
+                duration: 750,
             });
             map.dragRotate.enable();
             map.dragRotate.setPitchWithRotate(true);
@@ -43,7 +43,7 @@
         } else {
             map.easeTo({
                 pitch: 0,
-                duration: 1000,
+                duration: 750,
             });
         }
     };

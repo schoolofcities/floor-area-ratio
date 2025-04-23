@@ -12,6 +12,12 @@
     let FAR_DATA_URL = "FAR_DATA.pmtiles";
     let FAR_PROPERTY_URL = "FAR_PROPERTY.pmtiles";
 
+    import farA from "../assets/far-a.svg";
+    import farB from "../assets/far-b.svg";
+    import farC from "../assets/far-c.svg";
+    import socLogo from "../assets/top-logo-full.svg";
+    import githubLogo from "../assets/github-mark.svg";
+
     let map;
     let is3DVisible = false;
 
@@ -238,8 +244,8 @@
                 minzoom: 13.5,
             });
 
-                        //MOVING ROAD LABELS TO THE TOP
-                        map.moveLayer("roadname_minor");
+            //MOVING ROAD LABELS TO THE TOP
+            map.moveLayer("roadname_minor");
             map.moveLayer("roadname_sec");
             map.moveLayer("roadname_pri");
             map.moveLayer("roadname_major");
@@ -321,7 +327,7 @@
 
 <div
     id="box"
-    style="height: {isTextVisible ? 'calc(100vh - 30px)' : '240px'}; "
+    style="height: {isTextVisible ? 'calc(100vh - 30px)' : '250px'}; "
 >
     <div class="title">
         <h3>Toronto FAR Map</h3>
@@ -370,21 +376,12 @@
         <p
             style="display: flex; flex-direction: column; justify-content: center; align-items: center;"
         >
-            <img
-                class="far-diagram"
-                src="/src/assets/far-a.svg"
-                alt="FAR Diagram"
-            /> <small>FAR: 1.0</small>
-            <img
-                class="far-diagram"
-                src="/src/assets/far-b.svg"
-                alt="FAR Diagram"
-            /> <small>FAR: 1.0</small>
-            <img
-                class="far-diagram"
-                src="/src/assets/far-c.svg"
-                alt="FAR Diagram"
-            /> <small>FAR: 1.0</small>
+            <img class="far-diagram" src={farA} alt="FAR Diagram" />
+            <small>FAR: 1.0</small>
+            <img class="far-diagram" src={farB} alt="FAR Diagram" />
+            <small>FAR: 1.0</small>
+            <img class="far-diagram" src={farC} alt="FAR Diagram" />
+            <small>FAR: 1.0</small>
         </p>
         <p></p>
         <h4>Methodology</h4>
@@ -426,7 +423,7 @@
             >
                 GitHub
             </a>.<img
-                src="src/assets/github-mark.svg"
+                src={githubLogo}
                 alt="GitHub Logo"
                 style=" height: 15px; vertical-align: center; padding: 0 3px;"
             />
@@ -443,13 +440,20 @@
     </div>
 
     <div class="bottom-content">
-        <button
-            class="btn toggle-text-btn"
-            on:click={toggleTextVisibility}
-            style="margin-bottom: 10px; font-size: 12px;"
-        >
-            {isTextVisible ? "▼" : "▲"}
-        </button>
+        <div class="button-container">
+            <button
+                class="btn toggle-text-btn"
+                on:click={toggleTextVisibility}
+            >
+                {isTextVisible ? "▼ Hide Info" : "▲ Show Info "}
+            </button>
+            <button
+                class="btn toggle-3d-btn {is3DVisible ? 'active' : ''}"
+                on:click={toggle3DVisibility}
+            >
+                {is3DVisible ? "3D" : "3D"}
+            </button>
+        </div>
 
         <div id="legend">
             <div
@@ -473,18 +477,10 @@
         </div>
 
         <a href="https://schoolofcities.utoronto.ca/" target="_blank">
-            <img class="logo" src="src/assets/top-logo-full.svg" alt="Logo" />
+            <img class="logo" src={socLogo} alt="Logo" />
         </a>
     </div>
 </div>
-
-<button
-    class="btn toggle-3d-btn {is3DVisible ? 'active' : ''}"
-    on:click={toggle3DVisibility}
-    style="margin-top: 10px;"
->
-    {is3DVisible ? "3D" : "3D"}
-</button>
 
 <div id="map"></div>
 
@@ -493,19 +489,13 @@
         font-family: TradeGothicBold;
     }
 
-    .btn.toggle-3d-btn {
-        position: fixed;
-        top: 95px;
-        right: 8px;
-        width: 32px;
-        font-size: 10pt;
-        background-color: white;
-        padding: 5px;
-        border-radius: 5px;
-        border: 2px solid rgb(228, 228, 228);
-        cursor: pointer;
-        font-weight: regular;
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 10px;
     }
+
 
     .btn.toggle-3d-btn.active {
         background-color: #e0e0e0;
@@ -558,24 +548,37 @@
     .toggle-text-btn {
         background-color: rgba(0, 0, 0, 0);
         color: black;
-        padding: 5px 0 0 0;
-        width: 100%;
-        border: 0px solid #ccc;
+        /* margin: 10px 0 0 0; */
+        width: 90px;
+        height: 25px;
+        border: 1px solid #ccc;
         cursor: pointer;
         /* border-bottom: #ccc 1px solid; */
-        border-top: #ccc 1px solid;
-        font-size: 12pt;
+        font-size: 10pt;
+        border-radius: 5px;
+        font-family: TradeGothicBold;
+    }
+
+    .toggle-text-btn:hover {
+        background-color: #e0e0e0;
     }
 
     .toggle-3d-btn {
-        background-color: white;
+        background-color: rgba(0, 0, 0, 0);
         color: black;
-        padding: 5px;
-        width: 150px;
-        border-radius: 5px;
+        /* margin: 10px 0 0 0; */
+        width: 35px;
+        height: 25px;
         border: 1px solid #ccc;
         cursor: pointer;
-        margin: 0 0;
+        /* border-bottom: #ccc 1px solid; */
+        font-size: 10pt;
+        border-radius: 5px;
+        font-family: TradeGothicBold;
+    }
+
+    .toggle-3d-btn:hover {
+        background-color: #e0e0e0;
     }
 
     #legend {
@@ -597,6 +600,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        border-top: #ccc 1px solid;
+        height: 500px;
     }
     .equation {
         display: flex;
@@ -604,14 +609,13 @@
         align-items: center;
         text-align: center;
         padding: 10px 0;
-        
     }
 
- mi {
-    font-size: 15px;
-    font-style: italic;
-    padding: 5px;
- }
+    mi {
+        font-size: 15px;
+        font-style: italic;
+        padding: 5px;
+    }
 
     @media screen and (max-width: 750px) {
         #box {

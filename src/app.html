@@ -5,7 +5,38 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
+
+		<title>Toronto Floor Area Ratio Map | School of Cities</title>
+
+		<meta name="description" content="Discover Toronto's urban density with the floor area ratio (FAR) values across the city">
+		<meta name="author" content="Jeff Allen, Scott McCallum">
+
+		<meta property="og:title" content="Toronto Floor Area Ratio Map | School of Cities" />
+		<meta property="og:description" content="Discover Toronto's urban density with the floor area ratio (FAR) values across the city" />		
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://schoolofcities.github.io/floor-area-ratio" />
+		<meta property="og:image" content="https://schoolofcities.github.io/floor-area-ratio/web-card.png" />
+		<meta property="og:locale" content="en_CA">
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="https://schoolofcities.github.io/floor-area-ratio" />
+		<meta name="twitter:creator" content="@UofTCities" />
+		<meta name="twitter:title" content="Toronto Floor Area Ratio Map | School of Cities" />
+		<meta name="twitter:description" content="Discover Toronto's urban density with the floor area ratio (FAR) values across the city" />
+		<meta name="twitter:image" content="https://schoolofcities.github.io/floor-area-ratio/web-card.png" /> 
+
+
 	</head>
+
+
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-XB09CWTEWB"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', 'G-XB09CWTEWB');
+	</script>
+
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>

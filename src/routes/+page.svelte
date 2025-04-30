@@ -346,13 +346,7 @@
     });
 </script>
 
-<svelte:head>
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, minimum-scale=1"
-    />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-</svelte:head>
+
 
 <div
     id="box"
@@ -426,7 +420,7 @@
         <h4>Data download links</h4>
         <ul>
             <li>
-                <a href="/static/toronto_far.csv">FAR Data</a>
+                <a href="./toronto_far.csv">FAR Data</a>
             </li>
             <li>
                 <a

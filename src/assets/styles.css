@@ -106,6 +106,7 @@ main {
 .text {
     background-color: none;
     max-width: 700px;
+    width: 100%;
     margin: 0 auto;
     position: relative;
     padding-left: 15px;
@@ -120,7 +121,6 @@ h1 {
     font-family: sans-serif;
     font-size: 42px;
     color: var(--brandBlack);
-    /* border-bottom: solid 1px var(--brandGray); */
     text-decoration: none;
     margin-top: 40px;
     margin-bottom: 40px;
@@ -131,7 +131,6 @@ h2 {
     text-align: left;
     font-family: sans-serif;
     font-size: 24px;
-    /* border-bottom: solid 1px var(--brandBlack); */
     margin-top: 0px;
     color: var(--brandBlack);
 }
@@ -140,7 +139,6 @@ h3 {
     text-align: left;
     font-family: TradeGothicBold;
     font-size: 23px;
-    /* border-bottom: solid 1px var(--brandGray); */
     color: var(--brandBlack);
     padding-bottom: 5px;
 }
@@ -159,7 +157,7 @@ p {
     color: var(--brandBlack);
     text-align: left;
     font-size: 15px;
-    line-height: 25px;
+    line-height: 22px;
 }
 
 ul {

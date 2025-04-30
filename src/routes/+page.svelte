@@ -83,9 +83,10 @@
         map = new maplibregl.Map({
             container: "map",
             style: baseMap,
-            center: [-79.409168, 43.650783],
-            zoom: 11.6,
+            center: [-79.41, 43.65],
+            zoom: 13,
             bearing: -17,
+            // pitch: 10,
             scrollZoom: true,
             minZoom: 10.5,
             maxPitch: 0,
@@ -176,19 +177,33 @@
                 source: "far-colour",
                 "source-layer": "far",
                 paint: {
+                    // "fill-color": [
+                    //     "case",
+                    //     ["<", ["get", "far"], 0.1],
+                    //     "rgba(0,0,0,0)", // 0.1 <
+                    //     ["<", ["get", "far"], 1.0],
+                    //     "#c8d1e5", // 0.1 - 1.0
+                    //     ["<", ["get", "far"], 2.0],
+                    //     "#89b6d6", // 1.0 - 2.0
+                    //     ["<", ["get", "far"], 5.0],
+                    //     "#499fb9", // 2.0 - 5.0
+                    //     ["<", ["get", "far"], 15.0],
+                    //     "#17898c", // 5.0 - 15.0
+                    //     "#015847", // > 15.0
+                    // ],
                     "fill-color": [
                         "case",
                         ["<", ["get", "far"], 0.1],
                         "rgba(0,0,0,0)", // 0.1 <
                         ["<", ["get", "far"], 1.0],
-                        "#c8d1e5", // 0.1 - 1.0
+                        "#C5E3E7", // 0.1 - 1.0
                         ["<", ["get", "far"], 2.0],
-                        "#89b6d6", // 1.0 - 2.0
+                        "#84CEE9", // 1.0 - 2.0
                         ["<", ["get", "far"], 5.0],
-                        "#499fb9", // 2.0 - 5.0
+                        "#33A0C4", // 2.0 - 5.0
                         ["<", ["get", "far"], 15.0],
-                        "#17898c", // 5.0 - 15.0
-                        "#015847", // > 15.0
+                        "#056F83", // 5.0 - 15.0
+                        "#0D534D", // > 15.0
                     ],
                     "fill-opacity": 1,
                 },
@@ -266,15 +281,29 @@
                         ["<", ["get", "far"], 0.1],
                         "#f2f2f2", // 0.1 >
                         ["<=", ["get", "far"], 1.0],
-                        "#c8d1e5", // 0.1 - 1.0
+                        "#C5E3E7", // 0.1 - 1.0
                         ["<=", ["get", "far"], 2.0],
-                        "#89b6d6", // 1.0 - 2.0
+                        "#84CEE9", // 1.0 - 2.0
                         ["<=", ["get", "far"], 5.0],
-                        "#499fb9", // 2.0 - 5.0
+                        "#33A0C4", // 2.0 - 5.0
                         ["<=", ["get", "far"], 15.0],
-                        "#17898c", // 5.0 - 15.0
-                        "#015847", // > 15.0
+                        "#056F83", // 5.0 - 15.0
+                        "#0D534D", // > 15.0
                     ],
+                    // "fill-extrusion-color": [
+                    //     "case",
+                    //     ["<", ["get", "far"], 0.1],
+                    //     "#f2f2f2", // 0.1 >
+                    //     ["<=", ["get", "far"], 1.0],
+                    //     "#c8d1e5", // 0.1 - 1.0
+                    //     ["<=", ["get", "far"], 2.0],
+                    //     "#89b6d6", // 1.0 - 2.0
+                    //     ["<=", ["get", "far"], 5.0],
+                    //     "#499fb9", // 2.0 - 5.0
+                    //     ["<=", ["get", "far"], 15.0],
+                    //     "#17898c", // 5.0 - 15.0
+                    //     "#015847", // > 15.0
+                    // ],
                     "fill-extrusion-height": ["get", "AVG_HEIGHT"],
                     "fill-extrusion-base": 0,
                     "fill-extrusion-opacity": 0.9,
@@ -336,11 +365,11 @@
     <div class="text" style="display: {isTextVisible ? 'block' : 'none'};">
         <h4>What is Floor Area Ratio (FAR)?</h4>
         <p>
-            <a href="https://jamaps.github.io/" target="_blank">Jeff Allen</a>,
+           
             <a
                 href="https://www.linkedin.com/in/scott-christian-mccallum/"
                 target="_blank">Scott McCallum</a
-            > | April 2025
+            >,  <a href="https://jamaps.github.io/" target="_blank">Jeff Allen</a> | April 2025
         </p>
         <p>
             FAR is a measure of a building's total floor area relative to the
@@ -386,20 +415,19 @@
         <p></p>
         <h4>Methodology</h4>
         <p>
-            This visualization was created using 3D massing and property
+            This visualization was created combining 3D massing and property
             boundary data from
             <a href="https://open.toronto.ca/" target="_blank"
                 >the City of Toronto’s Open Data Portal</a
-            >.
-        </p>
-
-        <p>
-            For the FAR calculations, we assumed an average building floor
+            >. For the FAR calculations, we assumed an average building floor
             height of 3 meters.
         </p>
 
-        <h4>Data</h4>
+        <h4>Data download links</h4>
         <ul>
+            <li>
+                <a href="/static/toronto_far.csv">FAR Data</a>
+            </li>
             <li>
                 <a
                     href="https://open.toronto.ca/dataset/3d-massing/"
@@ -412,7 +440,7 @@
                     target="_blank">Property Boundaries</a
                 >
             </li>
-            <li><a href="/static/toronto_far.csv">FAR Data</a></li>
+            
         </ul>
 
         <p>
@@ -502,7 +530,7 @@
     }
 
     a:hover .logo {
-        opacity: 0.7;
+        opacity: 0.8;
     }
 
     #map {

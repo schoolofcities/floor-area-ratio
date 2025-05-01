@@ -651,7 +651,7 @@
 
     #legend-title {
         font-size: 10px;
-    }   
+    }
 
     #legend {
         margin: 0 10px;
@@ -706,31 +706,29 @@
     }
 
     @media screen and (max-width: 400px) {
-
         h3 {
             font-size: 18px;
         }
 
         h4 {
-            font-size: 14px;
+            font-size: 16px;
         }
 
         p {
-            font-size: 9pt;
-            line-height: 19px;
-
+            font-size: 10pt;
+            line-height: 20px;
         }
         .equation math mi {
-        font-size: 9pt;
-    }
-
-        li{
-            font-size: 9pt;
+            font-size: 10pt;
         }
 
-#box {
-    padding-bottom:10px;
-}
+        li {
+            font-size: 10pt;
+        }
+
+        #box {
+            padding-bottom: 10px;
+        }
 
         #box.is-text-hidden {
             height: 190px;
@@ -746,9 +744,14 @@
             margin-top: 5px;
         }
 
+        /* #legend{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+        } */
+
         #legend-title {
             height: 0px;
-            /* font-size: 9pt !important; */
         }
 
         .legend {
@@ -756,6 +759,8 @@
             width: 200px;
             margin: 0 auto;
             display: flex;
+            justify-content: center;
+            align-items: center;
         }
         rect {
             height: 10px;

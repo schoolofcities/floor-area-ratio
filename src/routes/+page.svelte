@@ -561,7 +561,7 @@
         border: 1px solid #ccc;
         cursor: pointer;
         /* border-bottom: #ccc 1px solid; */
-        font-size: 10pt;
+        font-size: 13px;
         border-radius: 5px;
         font-family: TradeGothicBold;
         display: flex;
@@ -584,7 +584,7 @@
         border: 1px solid #ccc;
         cursor: pointer;
         /* border-bottom: #ccc 1px solid; */
-        font-size: 10pt;
+        font-size: 13px;
         border-radius: 5px;
         font-family: TradeGothicBold;
         display: flex;
@@ -616,7 +616,7 @@
         padding: 1rem;
         box-sizing: border-box;
         position: absolute;
-        margin: 15px;
+        margin: 14px;
         padding: 20px;
         width: 360px;
         border-radius: 0.8em;
@@ -725,15 +725,15 @@
         }
 
         p {
-            font-size: 10pt;
-            line-height: 20px;
+            font-size: 14px;
+            line-height: 22px;
         }
         .equation math mi {
-            font-size: 10pt;
+            font-size: 14px;
         }
 
         li {
-            font-size: 10pt;
+            font-size: 14px;
         }
 
         #box {

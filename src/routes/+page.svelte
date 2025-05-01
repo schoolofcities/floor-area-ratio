@@ -328,7 +328,7 @@
 
 <div
     id="box"
-    style="height: {isTextVisible ? 'calc(100vh - 30px)' : '250px'}; "
+    style="height: {isTextVisible ? 'calc(100dvh - 30px)' : '250px'}; "
 >
     <div class="title">
         <h3>Toronto FAR Map</h3>
@@ -502,6 +502,50 @@
         background-color: #e0e0e0;
     }
 
+
+    .toggle-text-btn {
+        background-color: rgba(0, 0, 0, 0);
+        color: black;
+        /* margin: 10px 0 0 0; */
+        width: 100px;
+        height: 25px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        /* border-bottom: #ccc 1px solid; */
+        font-size: 10pt;
+        border-radius: 5px;
+        font-family: TradeGothicBold;
+        /* display: flex;
+        justify-content: center;
+        align-items: center; */
+    }
+
+    .toggle-text-btn:hover {
+        background-color: #e0e0e0;
+    }
+
+    .toggle-3d-btn {
+        background-color: rgba(0, 0, 0, 0);
+        color: black;
+        /* margin: 10px 0 0 0; */
+        width: 35px;
+        padding: 0 20px;
+        height: 25px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        /* border-bottom: #ccc 1px solid; */
+        font-size: 10pt;
+        border-radius: 5px;
+        font-family: TradeGothicBold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .toggle-3d-btn:hover {
+        background-color: #e0e0e0;
+    }
+
     a:hover .logo {
         opacity: 0.8;
     }
@@ -545,42 +589,6 @@
 
     h3 {
         margin: 0;
-    }
-
-    .toggle-text-btn {
-        background-color: rgba(0, 0, 0, 0);
-        color: black;
-        /* margin: 10px 0 0 0; */
-        width: 90px;
-        height: 25px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        /* border-bottom: #ccc 1px solid; */
-        font-size: 10pt;
-        border-radius: 5px;
-        font-family: TradeGothicBold;
-    }
-
-    .toggle-text-btn:hover {
-        background-color: #e0e0e0;
-    }
-
-    .toggle-3d-btn {
-        background-color: rgba(0, 0, 0, 0);
-        color: black;
-        /* margin: 10px 0 0 0; */
-        width: 35px;
-        height: 25px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        /* border-bottom: #ccc 1px solid; */
-        font-size: 10pt;
-        border-radius: 5px;
-        font-family: TradeGothicBold;
-    }
-
-    .toggle-3d-btn:hover {
-        background-color: #e0e0e0;
     }
 
     #legend {

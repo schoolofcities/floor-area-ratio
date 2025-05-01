@@ -717,6 +717,8 @@
 
         p {
             font-size: 9pt;
+            line-height: 19px;
+
         }
         .equation math mi {
         font-size: 9pt;

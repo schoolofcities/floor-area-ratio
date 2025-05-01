@@ -709,10 +709,6 @@
             flex-grow: 1;
             overflow-y: auto;
         }
-
-        .far-diagram {
-            width: 200px;
-        }
     }
 
     @media screen and (max-width: 400px) {
@@ -743,10 +739,6 @@
         #box.is-text-hidden {
             height: 195px;
             /* padding-bottom: 5px; */
-        }
-
-        .far-diagram {
-            width: 150px;
         }
 
         .logo {

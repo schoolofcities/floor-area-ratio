@@ -89,7 +89,7 @@
         map = new maplibregl.Map({
             container: "map",
             style: baseMap,
-            center: [-79.41, 43.65],
+            center: [-79.3961, 43.6530],
             zoom: 13,
             bearing: -17,
             // pitch: 10,
@@ -603,7 +603,6 @@
         flex-direction: column;
         align-items: center;
         border-top: #ccc 1px solid;
-        height: 500px;
     }
     .equation {
         display: flex;

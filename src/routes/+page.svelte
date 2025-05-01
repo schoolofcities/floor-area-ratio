@@ -177,6 +177,14 @@
                 });
             }
 
+            if (window.innerWidth < 400) {
+                map.jumpTo({
+                    center: [-79.379463, 43.642418],
+                    zoom: 11.6,
+                    bearing: -17,
+                });
+            }
+
             //BASE MAP
             topMap.forEach((e) => {
                 map.addLayer(e);
@@ -336,9 +344,8 @@
 
 <div
     id="box"
-    style="height: {isTextVisible
-        ? 'calc(var(--dynamic-height) - 30px)'
-        : '250px'}; "
+    class:is-text-visible={isTextVisible}
+    class:is-text-hidden={!isTextVisible}
 >
     <div class="title">
         <h3>Toronto FAR Map</h3>
@@ -470,7 +477,12 @@
             >
                 Floor Area Ratio (FAR)
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="250" height="50">
+            <svg
+                class="legend"
+                xmlns="http://www.w3.org/2000/svg"
+                width="250"
+                height="50"
+            >
                 <rect
                     x="0%"
                     y="10"
@@ -612,6 +624,14 @@
         bottom: 0;
     }
 
+    #box.is-text-visible {
+        height: calc(var(--dynamic-height) - 30px);
+    }
+
+    #box.is-text-hidden {
+        height: 250px;
+    }
+
     .title {
         margin: 0 0 5px 0;
         align-self: center;
@@ -628,6 +648,10 @@
     h3 {
         margin: 0;
     }
+
+    #legend-title {
+        font-size: 10px;
+    }   
 
     #legend {
         margin: 0 10px;
@@ -652,16 +676,15 @@
     }
     .equation {
         display: flex;
-        justify-content: left;
+        justify-content: center;
         align-items: center;
         text-align: center;
         padding: 10px 0;
-        font-family: TradeGothicBold;
+        /* font-family: TradeGothicBold; */
     }
 
-    .equation math {
-        font-family: TradeGothicBold;
-        font-size: 19px;
+    .equation math mi {
+        font-size: 14px;
     }
 
     @media screen and (max-width: 750px) {
@@ -679,6 +702,66 @@
 
         .far-diagram {
             width: 200px;
+        }
+    }
+
+    @media screen and (max-width: 400px) {
+
+        h3 {
+            font-size: 18px;
+        }
+
+        h4 {
+            font-size: 14px;
+        }
+
+        p {
+            font-size: 9pt;
+        }
+        .equation math mi {
+        font-size: 9pt;
+    }
+
+        li{
+            font-size: 9pt;
+        }
+
+#box {
+    padding-bottom:10px;
+}
+
+        #box.is-text-hidden {
+            height: 190px;
+            /* padding-bottom: 5px; */
+        }
+
+        .far-diagram {
+            width: 150px;
+        }
+
+        .logo {
+            height: 30px;
+            margin-top: 5px;
+        }
+
+        #legend-title {
+            height: 0px;
+            /* font-size: 9pt !important; */
+        }
+
+        .legend {
+            height: 50px;
+            width: 200px;
+            margin: 0 auto;
+            display: flex;
+        }
+        rect {
+            height: 10px;
+            transform: translateY(10px);
+        }
+
+        .legend text {
+            transform: translateY(0px);
         }
     }
 </style>

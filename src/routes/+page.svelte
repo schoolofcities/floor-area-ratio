@@ -171,7 +171,7 @@
             //MAP POSITION ON MOBILE LOAD
             if (window.innerWidth < 750) {
                 map.jumpTo({
-                    center: [-79.374384, 43.630475],
+                    center: [-79.383011, 43.650335],
                     zoom: 11.6,
                     bearing: -17,
                 });

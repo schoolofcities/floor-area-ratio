@@ -25,7 +25,13 @@
     // const colourGradient = ["#c8d1e5","#89b6d6","#499fb9","#17898c","#015847"];
     // const colourGradient = ["#C5E3E7","#84CEE9","#33A0C4","#056F83","#0D534D"];
     // const colourGradient = ["#D4E7E8","#97C9D4","#47A2BA","#007FA3","#0D534D"];
-    const colourGradient = ["#c8d1e5","#89b6d6","#499fb9","#007FA3","#0D534D"];
+    const colourGradient = [
+        "#c8d1e5",
+        "#89b6d6",
+        "#499fb9",
+        "#007FA3",
+        "#0D534D",
+    ];
 
     const scale = new maplibregl.ScaleControl({
         maxWidth: 100,
@@ -83,13 +89,17 @@
     }
 
     onMount(async () => {
+        const test = window.CSS?.supports("height", "100dvh");
+        const value = test ? "100dvh" : "100vh";
+        document.documentElement.style.setProperty("--dynamic-height", value);
+
         const protocol = new pmtiles.Protocol();
         maplibregl.addProtocol("pmtiles", protocol.tile);
 
         map = new maplibregl.Map({
             container: "map",
             style: baseMap,
-            center: [-79.3961, 43.6530],
+            center: [-79.3961, 43.653],
             zoom: 13,
             bearing: -17,
             // pitch: 10,
@@ -324,11 +334,11 @@
     });
 </script>
 
-
-
 <div
     id="box"
-    style="height: {isTextVisible ? 'calc(100dvh - 30px)' : '250px'}; "
+    style="height: {isTextVisible
+        ? 'calc(var(--dynamic-height) - 30px)'
+        : '250px'}; "
 >
     <div class="title">
         <h3>Toronto FAR Map</h3>
@@ -337,15 +347,17 @@
     <div class="text" style="display: {isTextVisible ? 'block' : 'none'};">
         <h4>What is Floor Area Ratio (FAR)?</h4>
         <p>
-           
             <a
                 href="https://www.linkedin.com/in/scott-christian-mccallum/"
                 target="_blank">Scott McCallum</a
-            >,  <a href="https://jamaps.github.io/" target="_blank">Jeff Allen</a> | April 2025
+            >,
+            <a href="https://jamaps.github.io/" target="_blank">Jeff Allen</a> |
+            April 2025
         </p>
         <p>
-            FAR is a measure of urban built density, measured as a building's total floor area relative to the
-            size of its lot. It is calculated as:
+            FAR is a measure of urban built density, measured as a building's
+            total floor area relative to the size of its lot. It is calculated
+            as:
         </p>
         <p class="equation">
             <math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -412,7 +424,6 @@
                     target="_blank">Property Boundaries</a
                 >
             </li>
-            
         </ul>
 
         <p>
@@ -441,10 +452,7 @@
 
     <div class="bottom-content">
         <div class="button-container">
-            <button
-                class="btn toggle-text-btn"
-                on:click={toggleTextVisibility}
-            >
+            <button class="btn toggle-text-btn" on:click={toggleTextVisibility}>
                 {isTextVisible ? "▼ Hide Info" : "▲ Show Info "}
             </button>
             <button
@@ -463,11 +471,41 @@
                 Floor Area Ratio (FAR)
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" width="250" height="50">
-                <rect x="0%" y="10" width="20%" height="15" fill={colourGradient[0]} />
-                <rect x="20%" y="10" width="20%" height="15" fill={colourGradient[1]} />
-                <rect x="40%" y="10" width="20%" height="15" fill={colourGradient[2]} />
-                <rect x="60%" y="10" width="20%" height="15" fill={colourGradient[3]} />
-                <rect x="80%" y="10" width="20%" height="15" fill={colourGradient[4]} />
+                <rect
+                    x="0%"
+                    y="10"
+                    width="20%"
+                    height="15"
+                    fill={colourGradient[0]}
+                />
+                <rect
+                    x="20%"
+                    y="10"
+                    width="20%"
+                    height="15"
+                    fill={colourGradient[1]}
+                />
+                <rect
+                    x="40%"
+                    y="10"
+                    width="20%"
+                    height="15"
+                    fill={colourGradient[2]}
+                />
+                <rect
+                    x="60%"
+                    y="10"
+                    width="20%"
+                    height="15"
+                    fill={colourGradient[3]}
+                />
+                <rect
+                    x="80%"
+                    y="10"
+                    width="20%"
+                    height="15"
+                    fill={colourGradient[4]}
+                />
                 <text x="0%" y="45" font-size="12">0.1</text>
                 <text x="20%" y="45" font-size="12">1.0</text>
                 <text x="40%" y="45" font-size="12">2.0</text>
@@ -485,7 +523,6 @@
 <div id="map"></div>
 
 <style>
-
     #legend-title {
         font-family: TradeGothicBold;
     }
@@ -497,11 +534,9 @@
         margin: 10px;
     }
 
-
     .btn.toggle-3d-btn.active {
         background-color: #e0e0e0;
     }
-
 
     .toggle-text-btn {
         background-color: rgba(0, 0, 0, 0);
@@ -542,7 +577,6 @@
         justify-content: center;
         align-items: center;
         white-space: nowrap;
-
     }
 
     .toggle-3d-btn:hover {
@@ -561,6 +595,7 @@
     }
 
     #box {
+        height: var(--dynamic-height, 100vh);
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -646,5 +681,4 @@
             width: 200px;
         }
     }
-
 </style>

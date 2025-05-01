@@ -21,6 +21,12 @@
     let map;
     let is3DVisible = false;
 
+    // const colourGradient = ["#EBF7F7","#69C8BA","#00A189","#077869", "#0D534D"];
+    // const colourGradient = ["#c8d1e5","#89b6d6","#499fb9","#17898c","#015847"];
+    // const colourGradient = ["#C5E3E7","#84CEE9","#33A0C4","#056F83","#0D534D"];
+    // const colourGradient = ["#D4E7E8","#97C9D4","#47A2BA","#007FA3","#0D534D"];
+    const colourGradient = ["#c8d1e5","#89b6d6","#499fb9","#007FA3","#0D534D"];
+
     const scale = new maplibregl.ScaleControl({
         maxWidth: 100,
         unit: "metric",
@@ -177,33 +183,19 @@
                 source: "far-colour",
                 "source-layer": "far",
                 paint: {
-                    // "fill-color": [
-                    //     "case",
-                    //     ["<", ["get", "far"], 0.1],
-                    //     "rgba(0,0,0,0)", // 0.1 <
-                    //     ["<", ["get", "far"], 1.0],
-                    //     "#c8d1e5", // 0.1 - 1.0
-                    //     ["<", ["get", "far"], 2.0],
-                    //     "#89b6d6", // 1.0 - 2.0
-                    //     ["<", ["get", "far"], 5.0],
-                    //     "#499fb9", // 2.0 - 5.0
-                    //     ["<", ["get", "far"], 15.0],
-                    //     "#17898c", // 5.0 - 15.0
-                    //     "#015847", // > 15.0
-                    // ],
                     "fill-color": [
                         "case",
                         ["<", ["get", "far"], 0.1],
                         "rgba(0,0,0,0)", // 0.1 <
                         ["<", ["get", "far"], 1.0],
-                        "#C5E3E7", // 0.1 - 1.0
+                        colourGradient[0], // 0.1 - 1.0
                         ["<", ["get", "far"], 2.0],
-                        "#84CEE9", // 1.0 - 2.0
+                        colourGradient[1], // 1.0 - 2.0
                         ["<", ["get", "far"], 5.0],
-                        "#33A0C4", // 2.0 - 5.0
+                        colourGradient[2], // 2.0 - 5.0
                         ["<", ["get", "far"], 15.0],
-                        "#056F83", // 5.0 - 15.0
-                        "#0D534D", // > 15.0
+                        colourGradient[3], // 5.0 - 15.0
+                        colourGradient[4], // > 15.0
                     ],
                     "fill-opacity": 1,
                 },
@@ -281,29 +273,15 @@
                         ["<", ["get", "far"], 0.1],
                         "#f2f2f2", // 0.1 >
                         ["<=", ["get", "far"], 1.0],
-                        "#C5E3E7", // 0.1 - 1.0
+                        colourGradient[0], // 0.1 - 1.0
                         ["<=", ["get", "far"], 2.0],
-                        "#84CEE9", // 1.0 - 2.0
+                        colourGradient[1], // 1.0 - 2.0
                         ["<=", ["get", "far"], 5.0],
-                        "#33A0C4", // 2.0 - 5.0
+                        colourGradient[2], // 2.0 - 5.0
                         ["<=", ["get", "far"], 15.0],
-                        "#056F83", // 5.0 - 15.0
-                        "#0D534D", // > 15.0
+                        colourGradient[3], // 5.0 - 15.0
+                        colourGradient[4], // > 15.0
                     ],
-                    // "fill-extrusion-color": [
-                    //     "case",
-                    //     ["<", ["get", "far"], 0.1],
-                    //     "#f2f2f2", // 0.1 >
-                    //     ["<=", ["get", "far"], 1.0],
-                    //     "#c8d1e5", // 0.1 - 1.0
-                    //     ["<=", ["get", "far"], 2.0],
-                    //     "#89b6d6", // 1.0 - 2.0
-                    //     ["<=", ["get", "far"], 5.0],
-                    //     "#499fb9", // 2.0 - 5.0
-                    //     ["<=", ["get", "far"], 15.0],
-                    //     "#17898c", // 5.0 - 15.0
-                    //     "#015847", // > 15.0
-                    // ],
                     "fill-extrusion-height": ["get", "AVG_HEIGHT"],
                     "fill-extrusion-base": 0,
                     "fill-extrusion-opacity": 0.9,
@@ -366,7 +344,7 @@
             >,  <a href="https://jamaps.github.io/" target="_blank">Jeff Allen</a> | April 2025
         </p>
         <p>
-            FAR is a measure of a building's total floor area relative to the
+            FAR is a measure of urban built density, measured as a building's total floor area relative to the
             size of its lot. It is calculated as:
         </p>
         <p class="equation">
@@ -387,7 +365,7 @@
         </p>
         <p>
             Higher FAR values indicate denser development, while lower values
-            suggest less intensive land use.
+            suggest less built-up land use.
         </p>
         <p>
             A tall, narrow tower and a low, sprawling building can have the same
@@ -399,12 +377,12 @@
         <p
             style="display: flex; flex-direction: column; justify-content: center; align-items: center;"
         >
-            <img class="far-diagram" src={farA} alt="FAR Diagram" />
-            <small>FAR: 1.0</small>
-            <img class="far-diagram" src={farB} alt="FAR Diagram" />
-            <small>FAR: 1.0</small>
             <img class="far-diagram" src={farC} alt="FAR Diagram" />
-            <small>FAR: 1.0</small>
+            FAR: 1.0
+            <img class="far-diagram" src={farB} alt="FAR Diagram" />
+            FAR: 1.0
+            <img class="far-diagram" src={farA} alt="FAR Diagram" />
+            FAR: 1.0
         </p>
         <p></p>
         <h4>Methodology</h4>
@@ -485,11 +463,11 @@
                 Floor Area Ratio (FAR)
             </div>
             <svg xmlns="http://www.w3.org/2000/svg" width="250" height="50">
-                <rect x="0%" y="10" width="20%" height="15" fill="#c8d1e5" />
-                <rect x="20%" y="10" width="20%" height="15" fill="#89b6d6" />
-                <rect x="40%" y="10" width="20%" height="15" fill="#499fb9" />
-                <rect x="60%" y="10" width="20%" height="15" fill="#17898c" />
-                <rect x="80%" y="10" width="20%" height="15" fill="#015847" />
+                <rect x="0%" y="10" width="20%" height="15" fill={colourGradient[0]} />
+                <rect x="20%" y="10" width="20%" height="15" fill={colourGradient[1]} />
+                <rect x="40%" y="10" width="20%" height="15" fill={colourGradient[2]} />
+                <rect x="60%" y="10" width="20%" height="15" fill={colourGradient[3]} />
+                <rect x="80%" y="10" width="20%" height="15" fill={colourGradient[4]} />
                 <text x="0%" y="45" font-size="12">0.1</text>
                 <text x="20%" y="45" font-size="12">1.0</text>
                 <text x="40%" y="45" font-size="12">2.0</text>
@@ -507,6 +485,7 @@
 <div id="map"></div>
 
 <style>
+
     #legend-title {
         font-family: TradeGothicBold;
     }
@@ -543,7 +522,7 @@
         position: absolute;
         margin: 15px;
         padding: 20px;
-        width: 350px;
+        width: 360px;
         border-radius: 0.8em;
         background-color: rgba(255, 255, 255, 0.9);
         border: 1px solid #ccc;
@@ -558,6 +537,7 @@
     }
 
     .text {
+        margin-left: -10px;
         flex-grow: 1;
         overflow-y: auto;
         font-family: SourceSerif;
@@ -627,16 +607,16 @@
     }
     .equation {
         display: flex;
-        justify-content: center;
+        justify-content: left;
         align-items: center;
         text-align: center;
         padding: 10px 0;
+        font-family: TradeGothicBold;
     }
 
-    mi {
-        font-size: 15px;
-        font-style: italic;
-        padding: 5px;
+    .equation math {
+        font-family: TradeGothicBold;
+        font-size: 19px;
     }
 
     @media screen and (max-width: 750px) {
@@ -656,4 +636,5 @@
             width: 200px;
         }
     }
+
 </style>

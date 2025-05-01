@@ -477,6 +477,7 @@
             >
                 Floor Area Ratio (FAR)
             </div>
+            <div class="bar-container">
             <svg
                 class="legend"
                 xmlns="http://www.w3.org/2000/svg"
@@ -524,6 +525,7 @@
                 <text x="60%" y="45" font-size="12">5.0</text>
                 <text x="80%" y="45" font-size="12">15.0+</text>
             </svg>
+        </div>
         </div>
 
         <a href="https://schoolofcities.utoronto.ca/" target="_blank">
@@ -687,6 +689,14 @@
         font-size: 14px;
     }
 
+    .bar-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 0 auto;
+    }
+
     @media screen and (max-width: 750px) {
         #box {
             position: absolute;
@@ -731,7 +741,7 @@
         }
 
         #box.is-text-hidden {
-            height: 190px;
+            height: 195px;
             /* padding-bottom: 5px; */
         }
 
@@ -757,8 +767,8 @@
         .legend {
             height: 50px;
             width: 200px;
-            margin: 0 auto;
             display: flex;
+            margin: 0 auto;
             justify-content: center;
             align-items: center;
         }

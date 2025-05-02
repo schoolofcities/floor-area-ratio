@@ -641,11 +641,11 @@
         align-items: center;
         text-align: center;
         padding: 10px 0;
-        font-family: SourceSerif;
     }
 
     .equation math mi {
         font-size: 14px;
+        font-family: SourceSerif;
     }
 
     .bar-container {

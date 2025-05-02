@@ -21,10 +21,6 @@
     let map;
     let is3DVisible = false;
 
-    // const colourGradient = ["#EBF7F7","#69C8BA","#00A189","#077869", "#0D534D"];
-    // const colourGradient = ["#c8d1e5","#89b6d6","#499fb9","#17898c","#015847"];
-    // const colourGradient = ["#C5E3E7","#84CEE9","#33A0C4","#056F83","#0D534D"];
-    // const colourGradient = ["#D4E7E8","#97C9D4","#47A2BA","#007FA3","#0D534D"];
     const colourGradient = [
         "#c8d1e5",
         "#89b6d6",
@@ -81,10 +77,8 @@
         // Update isTextVisible based on screen width
         if (previousWidth <= 750 && currentWidth > 750) {
             isTextVisible = true;
-            console.log("Text is visible");
         } else if (previousWidth > 750 && currentWidth <= 750) {
             isTextVisible = false;
-            console.log("Text is hidden");
         }
     }
 
@@ -102,7 +96,6 @@
             center: [-79.3961, 43.653],
             zoom: 13,
             bearing: -17,
-            // pitch: 10,
             scrollZoom: true,
             minZoom: 10.5,
             maxPitch: 0,
@@ -150,24 +143,6 @@
         });
 
         map.on("load", () => {
-            //CONSOLE LOG MAP POSITION
-            map.on("move", () => {
-                const center = map.getCenter();
-                const zoom = map.getZoom();
-                const bearing = map.getBearing();
-                const pitch = map.getPitch();
-
-                console.log("Map position:", {
-                    center: {
-                        lng: center.lng.toFixed(6),
-                        lat: center.lat.toFixed(6),
-                    },
-                    zoom: zoom.toFixed(2),
-                    bearing: bearing.toFixed(2),
-                    pitch: pitch.toFixed(2),
-                });
-            });
-
             //MAP POSITION ON MOBILE LOAD
             if (window.innerWidth < 750) {
                 map.jumpTo({
@@ -234,6 +209,8 @@
                     "fill-opacity": 0,
                 },
             });
+
+            // ADD ZOOM DEPENDENT LINE WIDTH
             map.addLayer({
                 id: "far-data-line",
                 type: "line",
@@ -246,24 +223,10 @@
                         ["linear"],
                         ["zoom"],
                         13.5,
-                        0.1, // At zoom level 13.5, line width is 0.1
+                        0.1,
                         18,
-                        1, // At zoom level 18, line width is 2.0
+                        1,
                     ],
-                    "line-opacity": 0.5,
-                },
-                minzoom: 13.5,
-            });
-
-            // add zoom dependent line width
-            map.addLayer({
-                id: "far-data-line",
-                type: "line",
-                source: "far-data",
-                "source-layer": "far",
-                paint: {
-                    "line-color": "#fff",
-                    "line-width": 0.1,
                     "line-opacity": 0.5,
                 },
                 minzoom: 13.5,
@@ -317,21 +280,20 @@
 
             map.on("mousemove", "far-data-layer", (e) => {
                 const currentZoom = map.getZoom();
-                const minZoom = 13; // Set the minimum zoom level for labels
+                const minZoom = 13;
 
                 if (currentZoom < minZoom) {
-                    popup.remove(); // Ensure the popup is removed if zoom is less than 14
-                    return; // Skip hover logic if zoom is less than 14
+                    popup.remove();
+                    return;
                 }
 
-                // Check if features exist under the cursor
                 const features = e.features;
                 if (features && features.length > 0) {
-                    const farValue = features[0].properties.far; // Adjust property name if different
+                    const farValue = features[0].properties.far;
                     popup
-                        .setLngLat(e.lngLat) // Set popup location
-                        .setHTML(`<strong>FAR:</strong> ${farValue}`) // Set popup content
-                        .addTo(map); // Add popup to the map
+                        .setLngLat(e.lngLat)
+                        .setHTML(`<strong>FAR:</strong> ${farValue}`)
+                        .addTo(map);
                 }
             });
 
@@ -478,54 +440,54 @@
                 Floor Area Ratio (FAR)
             </div>
             <div class="bar-container">
-            <svg
-                class="legend"
-                xmlns="http://www.w3.org/2000/svg"
-                width="250"
-                height="50"
-            >
-                <rect
-                    x="0%"
-                    y="10"
-                    width="20%"
-                    height="15"
-                    fill={colourGradient[0]}
-                />
-                <rect
-                    x="20%"
-                    y="10"
-                    width="20%"
-                    height="15"
-                    fill={colourGradient[1]}
-                />
-                <rect
-                    x="40%"
-                    y="10"
-                    width="20%"
-                    height="15"
-                    fill={colourGradient[2]}
-                />
-                <rect
-                    x="60%"
-                    y="10"
-                    width="20%"
-                    height="15"
-                    fill={colourGradient[3]}
-                />
-                <rect
-                    x="80%"
-                    y="10"
-                    width="20%"
-                    height="15"
-                    fill={colourGradient[4]}
-                />
-                <text x="0%" y="45" font-size="12">0.1</text>
-                <text x="20%" y="45" font-size="12">1.0</text>
-                <text x="40%" y="45" font-size="12">2.0</text>
-                <text x="60%" y="45" font-size="12">5.0</text>
-                <text x="80%" y="45" font-size="12">15.0+</text>
-            </svg>
-        </div>
+                <svg
+                    class="legend"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="250"
+                    height="50"
+                >
+                    <rect
+                        x="0%"
+                        y="10"
+                        width="20%"
+                        height="15"
+                        fill={colourGradient[0]}
+                    />
+                    <rect
+                        x="20%"
+                        y="10"
+                        width="20%"
+                        height="15"
+                        fill={colourGradient[1]}
+                    />
+                    <rect
+                        x="40%"
+                        y="10"
+                        width="20%"
+                        height="15"
+                        fill={colourGradient[2]}
+                    />
+                    <rect
+                        x="60%"
+                        y="10"
+                        width="20%"
+                        height="15"
+                        fill={colourGradient[3]}
+                    />
+                    <rect
+                        x="80%"
+                        y="10"
+                        width="20%"
+                        height="15"
+                        fill={colourGradient[4]}
+                    />
+                    <text x="0%" y="45" font-size="12">0.1</text>
+                    <text x="20%" y="45" font-size="12">1.0</text>
+                    <text x="40%" y="45" font-size="12">2.0</text>
+                    <text x="60%" y="45" font-size="12">5.0</text>
+                    <text x="80%" y="45" font-size="12">15.0+</text>
+                </svg>
+            </div>
         </div>
 
         <a href="https://schoolofcities.utoronto.ca/" target="_blank">
@@ -560,7 +522,6 @@
         height: 25px;
         border: 1px solid #ccc;
         cursor: pointer;
-        /* border-bottom: #ccc 1px solid; */
         font-size: 13px;
         border-radius: 5px;
         font-family: TradeGothicBold;
@@ -577,13 +538,11 @@
     .toggle-3d-btn {
         background-color: rgba(0, 0, 0, 0);
         color: black;
-        /* margin: 10px 0 0 0; */
         width: auto;
         padding: 0 10px;
         height: 25px;
         border: 1px solid #ccc;
         cursor: pointer;
-        /* border-bottom: #ccc 1px solid; */
         font-size: 13px;
         border-radius: 5px;
         font-family: TradeGothicBold;
@@ -682,7 +641,7 @@
         align-items: center;
         text-align: center;
         padding: 10px 0;
-        /* font-family: TradeGothicBold; */
+        font-family: SourceSerif;
     }
 
     .equation math mi {
@@ -738,19 +697,12 @@
 
         #box.is-text-hidden {
             height: 195px;
-            /* padding-bottom: 5px; */
         }
 
         .logo {
             height: 30px;
             margin-top: 5px;
         }
-
-        /* #legend{
-            display:flex;
-            justify-content: center;
-            align-items: center;
-        } */
 
         #legend-title {
             height: 0px;

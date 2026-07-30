@@ -18,8 +18,12 @@
     import socLogo from "../assets/top-logo-full.svg";
     import githubLogo from "../assets/github-mark.svg";
 
+    import basemapLayers from "$lib/neutral-grey.json";
+
     let map;
     let is3DVisible = false;
+
+    const FAR_COLOUR_MAX_ZOOM = 14;
 
     const colourGradient = [
         "#c8d1e5",
@@ -38,10 +42,10 @@
         is3DVisible = !is3DVisible;
 
         if (map.getLayer("massing-layer")) {
-            map.setLayoutProperty(
+            map.setPaintProperty(
                 "massing-layer",
-                "visibility",
-                is3DVisible ? "visible" : "none",
+                "fill-extrusion-height",
+                is3DVisible ? ["get", "AVG_HEIGHT"] : 0,
             );
         }
 
@@ -92,9 +96,19 @@
 
         map = new maplibregl.Map({
             container: "map",
-            style: baseMap,
-            center: [-79.3961, 43.653],
-            zoom: 13,
+            style: {
+                version: 8,
+                glyphs: "https://schoolofcities.github.io/fonts/fonts/{fontstack}/{range}.pbf",
+                sources: {
+                    openmaptiles: {
+                        type: "vector",
+                        url: "https://tiles.openfreemap.org/planet",
+                    },
+                },
+                layers: basemapLayers,
+            },
+            center: [ -79.45006418033799, 43.69530134384917],
+            zoom: 10,
             bearing: -17,
             scrollZoom: true,
             minZoom: 10.5,
@@ -263,14 +277,28 @@
                         colourGradient[3], // 5.0 - 15.0
                         colourGradient[4], // > 15.0
                     ],
-                    "fill-extrusion-height": ["get", "AVG_HEIGHT"],
+                    "fill-extrusion-height": 0,
                     "fill-extrusion-base": 0,
                     "fill-extrusion-opacity": 0.9,
                 },
                 layout: {
-                    visibility: "none",
+                    visibility: "visible",
                 },
             });
+
+            // Show/hide the far-colour layer based on zoom level, so that
+            // at the lowest zoom levels only the massing-layer is shown
+            const updateFarColourVisibility = () => {
+                if (map.getLayer("far-colour-layer")) {
+                    map.setLayoutProperty(
+                        "far-colour-layer",
+                        "visibility",
+                        map.getZoom() > FAR_COLOUR_MAX_ZOOM ? "none" : "visible",
+                    );
+                }
+            };
+            updateFarColourVisibility();
+            map.on("zoom", updateFarColourVisibility);
 
             //HOVER FAR LABELS
             const popup = new maplibregl.Popup({
